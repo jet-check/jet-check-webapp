@@ -6,6 +6,7 @@ export class JetCheckNavbar extends Component {
   render() {
     return (
       <>
+      <div>
         <ReactBootStrap.Navbar
           collapseOnSelect
           expand="xl"
@@ -30,15 +31,16 @@ export class JetCheckNavbar extends Component {
               </ReactBootStrap.Nav.Link>
             </ReactBootStrap.Nav>
             <ReactBootStrap.Nav>
-              <ReactBootStrap.Nav.Link href="#deets">
-                More deets
+              <ReactBootStrap.Nav.Link href="#Later implementation">
+                
               </ReactBootStrap.Nav.Link>
-              <ReactBootStrap.Nav.Link eventKey={2} href="#memes">
-                Dank memes
+              <ReactBootStrap.Nav.Link eventKey={2} href="#later">
+                =
               </ReactBootStrap.Nav.Link>
             </ReactBootStrap.Nav>
           </ReactBootStrap.Navbar.Collapse>
         </ReactBootStrap.Navbar>
+        </div>
       </>
     );
   }
