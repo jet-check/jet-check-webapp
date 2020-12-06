@@ -1,5 +1,5 @@
 var pwModal = document.getElementById("pwModal");
-var itemModal = docuemt.getElementById("itemModal");
+var itemModal = document.getElementById("itemModal");
 
 function closePWModal() {
     pwModal.style.display = "none";

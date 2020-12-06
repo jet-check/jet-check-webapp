@@ -31,12 +31,12 @@
             <div class="contentPane">
                 <div class="contentHead">Waren</div>
                 <div class="contentButtonPane <c:if test="${!authorized}">hidden</c:if>">
-                        <div class="contentButton">
-                            <p class="contentButtonText">Hinzufügen</p>
-                        </div>
-                        <div class="contentButton">
-                            <p class="contentButtonText">Löschen</p>
-                        </div>
+                        <button class="contentButton" onclick="openItemModal()">
+                            Hinzufügen
+                        </button>
+                        <button class="contentButton">
+                            Löschen
+                        </button>
                     </div>
                     <div class="contentEntryPane">
                         <div class="contentEntry">
@@ -96,31 +96,51 @@
                     </div>
                     <div class="modalValue">
                         <center>
-                            <div class="inputForm">
-                                <form method="POST" name="passwordInput">
+                            <form method="POST" name="passwordInput">
+                                <div class="inputForm">
+
                                     <input class="inputField" type="password" name="password" placeholder="Passwort">
                                     <br>
-                                    <label class="formError"><c:if test="${!wrongPassword}">Falsches Passwort</c:if></label>                            
+                                    <label class="formError"><c:if test="${wrongPassword}">Falsches Passwort</c:if></label>                            
+
+                                    </div>
+                                    <div class="modalButtons">
+                                        <button class="confirmButton" onclick="submit()">OK</button>
+                                        <button class="cancelButton" onclick="closePWModal()">Abbrechen</button>
+                                    </div>
                                 </form>
-                            </div>
-                            <div class="modalButtons">
-                                <button class="confirmButton">OK</button>
-                                <button class="cancelButton">Abbrechen</button>
-                            </div>
-                        </center>
+                            </center>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div id="itemModal" class="modal">
-                <div class="modal-content">
-                    <div class="modalHeader">
-                        <div class="headerContent">
-                            Neue Ware
+                <div id="itemModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modalHeader">
+                            <div class="headerContent">
+                                Neue Ware
+                            </div>
+                            <span class="close" onclick="closeItemModal()">&#10005</span>
                         </div>
-                        <span class="close" onclick="closeItemModal()">&#10005</span>
-                </div>
-            </div>                  
-        </div>
-        <script src="src/modal.js" type="text/javascript"></script>
+                        <div class="modalValue">
+                            <center>
+                                <form method="POST" name="newProduct">
+                                    <div class="inputForm">
+
+                                        <input class="inputField" type="text" name="productname" placeholder="Warenname">
+                                        <br>
+                                        <label class="formError"><c:if test="${itemNameMissing}">Warennamen eingeben</c:if></label>
+
+                                </div>
+                                <div class="modalButtons">
+                                    <button class="confirmButton">OK</button>
+                                    <button class="cancelButton" onclick="closeItemModal()">Abbrechen</button>
+                                </div>
+                            </form>
+                        </center>
+
+                    </div>
+                </div>                  
+            </div>
+            <script src="src/modal.js" type="text/javascript"></script>
     </body>
 </html>

@@ -103,14 +103,11 @@ Allgemeines Farbschema:
 }
 .contentButton{
     background-color: white;
+    border: none;
     width: 50%;
     margin: 0.1em;
-}
-.contentButton p{
-    text-align: center;
     font-size: 16px;
-    margin-top: 0.3em;
-
+    font-weight: bold;
 }
 .contentEntryPane{
     padding: 0.1em 0.6em 0.6em 0.6em;
