@@ -31,40 +31,39 @@
             <div class="contentPane">
                 <div class="contentHead">Waren</div>
                 <div class="contentButtonPane <c:if test="${!authorized}">hidden</c:if>">
-                    <div class="contentButton">
-                        <p class="contentButtonText">Hinzufügen</p>
+                        <div class="contentButton">
+                            <p class="contentButtonText">Hinzufügen</p>
+                        </div>
+                        <div class="contentButton">
+                            <p class="contentButtonText">Löschen</p>
+                        </div>
                     </div>
-                    <div class="contentButton">
-                        <p class="contentButtonText">Löschen</p>
-                    </div>
+                    <div class="contentEntryPane">
+                        <div class="contentEntry">
+                            <p class="entryContent">
+                                Ware 1
+                            </p>
+                        </div>
+                        <div class="contentEntry">
+                            <p class="entryContent">
+                                Ware 2
+                            </p>
+                        </div>
+                        <div class="contentEntry">
+                            <p class="entryContent">
+                                Ware 3
+                            </p>
+                        </div>
+                        <div class="contentEntry">
+                            <p class="entryContent">
+                                Ware 4
+                            </p>
+                        </div>
+                    </div>  
                 </div>
-                <div class="contentEntryPane">
-                    <div class="contentEntry">
-                        <p class="entryContent">
-                            Ware 1
-                        </p>
-                    </div>
-                    <div class="contentEntry">
-                        <p class="entryContent">
-                            Ware 2
-                        </p>
-                    </div>
-                    <div class="contentEntry">
-                        <p class="entryContent">
-                            Ware 3
-                        </p>
-                    </div>
-                    <div class="contentEntry">
-                        <p class="entryContent">
-                            Ware 4
-                        </p>
-                    </div>
-                </div>  
-            </div>
-            <div class="buttonPane">
-                <div class="buttonBackCancel button" name="backcancel">
-                    <p class="buttonText">
-                        <c:choose>
+                <div class="buttonPane">
+                    <button class="buttonBackCancel button" name="backcancel">
+                    <c:choose>
                         <c:when test="${authorized}">
                             Abbrechen
                         </c:when>
@@ -72,11 +71,9 @@
                             Zurück
                         </c:otherwise>
                     </c:choose>
-                    </p>
-                </div>
-                <div class="buttonEditAck button" name="editack">
-                    <p class="buttonText">
-                        <c:choose>
+                </button>
+                <button class="buttonEditAck button" name="editack"  onclick="<c:if test="${!authorized}">openPWModal()</c:if>">
+                    <c:choose>
                         <c:when test="${authorized}">
                             Fertig
                         </c:when>
@@ -84,9 +81,46 @@
                             Bearbeiten
                         </c:otherwise>
                     </c:choose>
-                    </p>
+                </button>
+            </div>
+            <!-- The Modal -->
+            <div id="pwModal" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modalHeader">
+                        <div class="headerContent">
+                            Passwort eingeben
+                        </div>
+                        <span class="close" onclick="closePWModal()">&#10005</span>
+                    </div>
+                    <div class="modalValue">
+                        <center>
+                            <div class="inputForm">
+                                <form method="POST" name="passwordInput">
+                                    <input class="inputField" type="password" name="password" placeholder="Passwort">
+                                    <br>
+                                    <label class="formError"><c:if test="${!wrongPassword}">Falsches Passwort</c:if></label>                            
+                                </form>
+                            </div>
+                            <div class="modalButtons">
+                                <button class="confirmButton">OK</button>
+                                <button class="cancelButton">Abbrechen</button>
+                            </div>
+                        </center>
+                    </div>
                 </div>
             </div>
+            <div id="itemModal" class="modal">
+                <div class="modal-content">
+                    <div class="modalHeader">
+                        <div class="headerContent">
+                            Neue Ware
+                        </div>
+                        <span class="close" onclick="closeItemModal()">&#10005</span>
+                </div>
+            </div>                  
         </div>
+        <script src="src/modal.js" type="text/javascript"></script>
     </body>
 </html>
