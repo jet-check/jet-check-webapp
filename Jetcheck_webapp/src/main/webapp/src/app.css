@@ -14,7 +14,7 @@ Allgemeines Farbschema:
 /* CSS for sidenav */
 .sidenav {
     height: 100%;
-    width: 23%;
+    width: 21%;
     position: fixed;
     z-index: 1;
     top: 0;
@@ -33,7 +33,7 @@ Allgemeines Farbschema:
 .navEntry {
     position: initial;  
     z-index: 5;
-    margin-left: 30%;
+    margin-left: 22%;
     margin-top: 26%;
     padding: 6px 12px 26px 12px;
     background-color: #ffffff;
@@ -85,7 +85,6 @@ Allgemeines Farbschema:
     max-height: 80%; 
     border-radius: 20px;
 }
-
 .contentHead{
     text-align:center;
     background-color: #fdc400;
@@ -158,7 +157,6 @@ Allgemeines Farbschema:
     color: white;
     border: 3px solid #2b2b2b;
 }
-
 /* css for modal */
 .modal {
     display: none; 
@@ -210,7 +208,7 @@ Allgemeines Farbschema:
     padding: 2em;
 }
 .inputForm{
-    
+
 }
 .inputField{
     height: 2.5em;
@@ -246,6 +244,35 @@ Allgemeines Farbschema:
     color: #3b3b3b;
     border: 3px solid #2b2b2b;
     height: 2.5em;
+    width: 15em;
+    border-radius:20px;
+    box-shadow: 0px 3px 10px #00000029;
+    font-size: 16px;
+    font-weight: bold;
+}
+/* css for submenus*/
+.itemRow{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.rowItem{
+    display: inline;
+}
+.itemContent{
+    display: block;
+    padding: 0 1em 0 1em;
+}
+.menuContainer{
+    width: 100%;
+    display: grid;
+    justify-items: center; 
+}
+.menuButton{
+    background-color: #3b3b3b;
+    color: white;
+    border: 3px solid #2b2b2b;
+    height: 3.0em;
     width: 15em;
     border-radius:20px;
     box-shadow: 0px 3px 10px #00000029;
