@@ -41,6 +41,10 @@ public class Jetcheck_controller extends HttpServlet {
         super.init(config); 
         hashed_pass = encryptThisString(password);
     } 
+    
+    public boolean checkPassword(String password) {
+        return hashed_pass.equals(encryptThisString(password));
+    }
 
     public static String encryptThisString(String input) {
         try {
@@ -106,7 +110,9 @@ public class Jetcheck_controller extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
-        request.setAttribute("hashed-password", hashed_pass);
+        if(request.getParameter("password") != null) {
+            request.setAttribute("IsPasswordCorrect", checkPassword(request.getParameter("password")));
+        }
     }
 
     /**
