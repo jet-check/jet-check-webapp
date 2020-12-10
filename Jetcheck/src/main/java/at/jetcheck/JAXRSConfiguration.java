@@ -1,4 +1,4 @@
-package at.jetcheck.jetcheck_webapp;
+package at.jetcheck;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

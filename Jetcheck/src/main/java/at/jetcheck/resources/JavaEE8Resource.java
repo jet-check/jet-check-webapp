@@ -1,4 +1,4 @@
-package at.jetcheck.jetcheck_webapp.resources;
+package at.jetcheck.resources;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;

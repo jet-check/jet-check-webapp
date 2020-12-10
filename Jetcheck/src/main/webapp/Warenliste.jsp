@@ -38,30 +38,17 @@
                         </button>
                     </div>
                     <div class="contentEntryPane">
+                    <c:forEach var="product" items="${products}">
                         <div class="contentEntry">
                             <p class="entryContent">
-                                Ware 1
+                                ${product}
                             </p>
                         </div>
-                        <div class="contentEntry">
-                            <p class="entryContent">
-                                Ware 2
-                            </p>
-                        </div>
-                        <div class="contentEntry">
-                            <p class="entryContent">
-                                Ware 3
-                            </p>
-                        </div>
-                        <div class="contentEntry">
-                            <p class="entryContent">
-                                Ware 4
-                            </p>
-                        </div>
-                    </div>  
-                </div>
-                <div class="buttonPane">
-                    <button class="buttonBackCancel button" name="backcancel">
+                    </c:forEach>
+                </div>  
+            </div>
+            <div class="buttonPane">
+                <button class="buttonBackCancel button" name="backcancel">
                     <c:choose>
                         <c:when test="${authorized}">
                             Abbrechen
@@ -95,7 +82,7 @@
                     </div>
                     <div class="modalValue">
                         <center>
-                            <form method="POST" name="passwordInput">
+                            <form method="POST" action="JetCheckController" name="passwordInput">
                                 <div class="inputForm">
 
                                     <input class="inputField" type="password" name="password" placeholder="Passwort">
@@ -112,6 +99,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div id="itemModal" class="modal">
                     <div class="modal-content">
                         <div class="modalHeader">
@@ -119,19 +107,18 @@
                                 Neue Ware
                             </div>
                             <span class="close" onclick="closeItemModal()">&#10005</span>
-                        </div>
-                        <div class="modalValue">
-                            <center>
-                                <form method="POST" name="newProduct">
-                                    <div class="inputForm">
+                    </div>
+                    <div class="modalValue">
+                        <center>
+                                <form method="POST" action="JetCheckController" name="newProduct">
+                                <div class="inputForm">
 
-                                        <input class="inputField" type="text" name="productname" placeholder="Warenname">
-                                        <br>
-                                        <label class="formError"><c:if test="${itemNameMissing}">Warennamen eingeben</c:if></label>
-
+                                    <input class="inputField" type="text" name="productname" placeholder="Warenname">
+                                    <br>
+                                    <label class="formError"><c:if test="${insertError}">Ware existiert bereits</c:if></label>
                                 </div>
                                 <div class="modalButtons">
-                                    <button class="confirmButton">OK</button>
+                                    <button class="confirmButton" onclick="submit()">OK</button>
                                     <button class="cancelButton" onclick="closeItemModal()">Abbrechen</button>
                                 </div>
                             </form>
