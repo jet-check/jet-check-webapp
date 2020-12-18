@@ -139,9 +139,7 @@ public class JetCheckController extends HttpServlet {
             try {
                 boolean isInserted = dba.insertNewProduct(productname);
                 products = dba.getAllProducts();
-                System.out.println(isInserted);
                 if (isInserted) {
-                    
                 } else {
                     request.setAttribute("insertError", true);
                 }
