@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -26,20 +28,31 @@ public class JSONAccess {
         json = new JsonMapper();
         urlBase = "http://www.omdbapi.com/?apikey=610a1d81";
     }
-    public List<String> searchDatabase(String pattern) throws MalformedURLException, IOException{
+    public Map<Integer,List<String>> searchDatabase(String pattern, int page) throws MalformedURLException, IOException{
+        System.out.println("searching database");
         List<String> movieIds = new ArrayList<>();
-        String urlString = urlBase + "%s=" + pattern;
+        String urlString = String.format("%s&s=%s&page=%d&type=movie", urlBase, pattern, page);
         URL url = new URL(urlString);
         JsonNode node = json.readTree(url);
-        
-        return movieIds;
+        List<JsonNode> nodes = node.findValues("imdbID"); // List of the 10 IDs as nodes
+            // System.out.println(node.get("totalResults")); // total number of results
+            // System.out.println(nodes);
+            for(int i = 0; i<10; i++){
+                movieIds.add(nodes.get(i).toString());
+            }
+            Map result = new HashMap<>();
+            result.put(node.get("totalResults").asInt(), movieIds);
+            movies.clear();
+        return result;
     }
     public List<Movie> getMovies(List<String> movieIds) throws MalformedURLException, IOException{
+        System.out.println("retrieving data");
         if(movies.isEmpty()){
             for (String movieId : movieIds) {
-                String urlString = urlBase + "%i=" + movieId;
+                String urlString = String.format("%s&type=movie&i=%s", urlBase, movieId).replace("\"", "");
+                // System.out.println(urlString);
                 URL url = new URL(urlString);
-                JsonNode node = json.readTree(url);
+                movies.add(json.readValue(url, Movie.class));
             }
         }
         return movies;

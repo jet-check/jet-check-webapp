@@ -5,10 +5,17 @@
  */
 package at.htlkaindorf.beans;
 
+import at.htlkaindorf.JSON.ListDeserializer;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
@@ -16,19 +23,41 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Movie {
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    
+    @JsonProperty("imdbID")
     private String id;
+    
+    @JsonProperty("Title")
     private String title;
-    private LocalDate releaseDate;
-    private int runtime;
+    
+    @JsonProperty("Released")
+    private String releaseRaw;
+    
+    @JsonProperty("Runtime")
+    private String runtime;
+    
+    @JsonProperty("Rated")
     private String rating;
+    @JsonProperty("Genre")
+    
+    @JsonDeserialize(using = ListDeserializer.class)
     private List<String> genres;
-    private String director;
-    private List<String> writers;
-    private List<String> actors;
-    private String production;
+    
+    @JsonProperty("Plot")
     private String plot;
+    
+    @JsonProperty("Poster")
     private String poster;
-    private String metacritics;
-    private String imdbRating;  
+    
+    public LocalDate getDateFormatted(){
+        return LocalDate.parse(releaseRaw, DTF);
+    }
+    
+    public String getGenreString(){
+        return genres.stream().collect(Collectors.joining(", "));
+    }
 }
