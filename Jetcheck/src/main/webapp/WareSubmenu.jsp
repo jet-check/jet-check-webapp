@@ -25,43 +25,43 @@
 
             <footer class="navFooter"></footer>
         </nav>
-
         <div class="content">
-            <div class="menuContainer">
-                <div class="itemRow">
-                    <div class="rowItem">
-                        <div class="itemContent">
-                            <svg width="300" height="180">
-                            <rect x="50" y="20" width="150" height="150"
-                                  style="fill:#fdc400;stroke:#fdc400;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
-                            </svg>
-                            <br>
-                            <button class="menuButton" name="productBtn">Waren</button>
+            
+                <div class="menuContainer">
+                    <div class="itemRow">
+                        <div class="rowItem">
+                            <div class="itemContent">
+                                <svg width="300" height="180">
+                                <rect x="50" y="20" width="150" height="150"
+                                      style="fill:#fdc400;stroke:#fdc400;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+                                </svg>
+                                <br>
+                                <button class="menuButton" name="productBtn">Waren</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="rowItem">
-                        <div class="itemContent">
-                            <svg width="300" height="180">
-                            <rect x="50" y="20" width="150" height="150"
-                                  style="fill:#fdc400;stroke:#fdc400;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
-                            </svg>
-                            <br>
-                            <button class="menuButton" name="productBtn">Lieferungen</button>
+                        <div class="rowItem">
+                            <div class="itemContent">
+                                <svg width="300" height="180">
+                                <rect x="50" y="20" width="150" height="150"
+                                      style="fill:#fdc400;stroke:#fdc400;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+                                </svg>
+                                <br>
+                                <button class="menuButton" name="productBtn">Lieferungen</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="rowItem">
-                        <div class="itemContent">
-                            <svg width="300" height="180">
-                            <rect x="50" y="20" width="150" height="150"
-                                  style="fill:#fdc400;stroke:#fdc400;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
-                            </svg>
-                            <br>
-                            <button class="menuButton" name="productBtn">Bruchwaren</button>
+                        <div class="rowItem">
+                            <div class="itemContent">
+                                <svg width="300" height="180">
+                                <rect x="50" y="20" width="150" height="150"
+                                      style="fill:#fdc400;stroke:#fdc400;stroke-width:5;fill-opacity:0.1;stroke-opacity:0.9" />
+                                </svg>
+                                <br>
+                                <button class="menuButton" name="productBtn">Bruchwaren</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-
+            
         </div>
     </body>
 </html>
