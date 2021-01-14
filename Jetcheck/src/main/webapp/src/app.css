@@ -34,24 +34,41 @@ Allgemeines Farbschema:
     position: initial;  
     z-index: 5;
     margin-left: 5.5em;
-    margin-top: 6em;
-    padding: 6px 12px 26px 12px;
-    background-color: #ffffff;
+    margin-top: 3em;
+    margin-bottom: 3em;
+    
     width: 12em;
-    height: 0.6em;
+    height: 6em;
+    
+    
+}
+.navLink{
+    width:100%;
+    height: 1em;
+    padding: 10px 12px 26px 12px;
+    background-color: #ffffff;
     border-radius: 15px;
     box-shadow: 0px 3px 10px #00000029;
 }
+.navLinkContainer{
+    margin-top: 6.5em;
+}
+.navLinkSelected{
+    width:100%;
+    height: 1em;
+    padding: 10px 12px 26px 12px;
+    background-color: #ffffff;
+    border-radius: 15px;
+}
 .navEntrySelected{
-    position: initial;
+   position: initial;  
     z-index: 5;
     margin-left: 5.5em;
-    margin-top: 6em;
-    padding: 6px 12px 26px 12px;
-    background-color: #ffffff;
+    margin-top: 3em;
+    margin-bottom: 3em;
+    
     width: 12em;
-    height: 0.6em;
-    border-radius: 15px;
+    height: 6em;
 }
 .sidenav a:hover {
     color: #2b2b2b;
@@ -159,6 +176,7 @@ Allgemeines Farbschema:
     color: white;
     border: 3px solid #2b2b2b;
 }
+
 /* css for modals */
 .modal {
     display: none; 
@@ -252,31 +270,21 @@ Allgemeines Farbschema:
     font-size: 16px;
     font-weight: bold;
 }
+
 /* css for submenus*/
-.itemRow{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.rowItem{
-    display: inline;
-}
-.itemContent{
-    display: block;
-    padding: 0 1em 0 1em;
-}
-.submenu{
-    
+.menuItem{
+    margin-left: 2em;
+    margin-right: 2em;
 }
 .menuContainer{
+    width: 60em;
+    margin-left: 17.5em;
     
-    justify-items: center; 
     position: absolute;
-    top: 50%;
+    top: 42%;
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);   
 }
-
 .menuButton{
     background-color: #3b3b3b;
     color: white;

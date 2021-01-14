@@ -22,17 +22,17 @@
                     </div>
 
                 </div>
-                <div class="navEntrySelected">
-                    <div class="navLinkSelected">
+                <div class="navEntry">
+                    <div class="navLink">
                         <form name="informationLink">
                             <a onclick="submit()" href="#">Information</a>    
                         </form>
                         
                     </div>
                 </div>
-                <div class="navEntry">
-                    <div class="navLink">
-                        <form name="gebäackLink">
+                <div class="navEntrySelected">
+                    <div class="navLinkSelected">
+                        <form name="gebäckLink">
                             <a onclick="submit()" href="#">Gebäck</a>
                         </form>
                         
@@ -103,7 +103,7 @@
                     <td class="menuItem">
                 <center>
                     <form method="POST" action="?">
-                        <input type="submit" class="menuButton" value="Dienstplan" name="dienstPlanBtn">
+                        <input type="submit" class="menuButton" value="Entnahmen Mitarbeiter" name="entnahmeBtn">
                     </form>
                     
                 </center>
@@ -111,7 +111,7 @@
                 <td class="menuItem">
                 <center>
                     <form method="POST" action="?">
-                        <input type="submit" class="menuButton" value="Schichtaufträge" name="schichtBtn">
+                        <input type="submit" class="menuButton" value="Altgebäck" name="altGebBtn">
                     </form>
                 </center>
 
@@ -119,7 +119,7 @@
                 <td class="menuItem">
                 <center>
                     <form method="POST" action="?">
-                        <input type="submit" class="menuButton" value="Sonderaufgaben" name="specialBtn">
+                        <input type="submit" class="menuButton" value="Bruchgebäck" name="bruchGebBtn">
                     </form>
                 </center>
                 </td>
