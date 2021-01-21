@@ -6,6 +6,7 @@
 package at.jetcheck.Controller;
 
 import at.jetcheck.db.DB_Access;
+import beans.Ware;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
@@ -33,7 +34,7 @@ public class JetCheckController extends HttpServlet {
     private DB_Access dba;
     private static String password = "yourPassword";
     private String hashed_pass;
-    private List<String> products = new ArrayList<>();
+    private List<Ware> products = new ArrayList<>();
 
     @Override
     public void init(ServletConfig config) throws ServletException {
