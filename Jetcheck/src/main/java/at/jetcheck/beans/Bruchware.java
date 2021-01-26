@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package beans;
+package at.jetcheck.beans;
 
 import java.time.LocalDate;
 import java.util.Objects;

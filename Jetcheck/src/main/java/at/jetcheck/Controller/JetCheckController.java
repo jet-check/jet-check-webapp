@@ -5,14 +5,17 @@
  */
 package at.jetcheck.Controller;
 
+import at.jetcheck.beans.Bruchware;
 import at.jetcheck.db.DB_Access;
-import beans.Ware;
+import at.jetcheck.beans.Ware;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -35,7 +38,8 @@ public class JetCheckController extends HttpServlet {
     private static String password = "yourPassword";
     private String hashed_pass;
     private List<Ware> products = new ArrayList<>();
-
+    private List<Bruchware> brokenproducts = new ArrayList<>(); // pls DB access for this one
+    
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -55,6 +59,7 @@ public class JetCheckController extends HttpServlet {
             Logger.getLogger(JetCheckController.class.getName()).log(Level.SEVERE, null, ex);
         }
         request.setAttribute("products", products);
+        request.setAttribute("brokenProducts", brokenproducts); //is needed for the broken goods List
         request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
         
     }
@@ -131,6 +136,18 @@ public class JetCheckController extends HttpServlet {
                 request.setAttribute("wrongPassword", true);
             }
             
+        }
+        /*
+            Just for testing
+            Inserts into the broken Products List
+            Needs to be done for the db
+        */
+        if (request.getParameter("brokenproductname") != null) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-DD");
+            String productname = request.getParameter("brokenproductname");
+            LocalDate date = LocalDate.parse(request.getParameter("date"), dtf);
+            int quantity = Integer.parseInt(request.getParameter("quantity"));
+            brokenproducts.add(new Bruchware(productname,date,quantity));
         }
         /*
             Inserts new product into database and updtates product list

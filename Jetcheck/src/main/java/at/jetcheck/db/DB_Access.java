@@ -5,8 +5,8 @@
  */
 package at.jetcheck.db;
 
-import beans.Bruchware;
-import beans.Ware;
+import at.jetcheck.beans.Bruchware;
+import at.jetcheck.beans.Ware;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
