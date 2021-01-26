@@ -25,10 +25,13 @@ public class DB_Access {
     private DB_Database db;
     private String insertProduct = "INSERT INTO public.\"Ware\" VALUES(?)";
     private String getAllProductsString = "SELECT * FROM public.\"Ware\"";
+    private String deleteAltWarenString = "DELETE FROM public.\"Ware\" WHERE LOWER(\"Warenname\") = LOWER(?)";
     private String insertBruchwareString = "INSERT INTO public.\"Bruchware\" VALUES(?, ?, ?)";
     private String getAllBruchwareString = "SELECT * FROM public.\"Bruchware\"";
+
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
+    private PreparedStatement deleteAltWarenStat;
     private PreparedStatement insertBruchwareStat;
     private PreparedStatement getAllBruchwareStat;
 
@@ -43,7 +46,6 @@ public class DB_Access {
         try {
             db = new DB_Database();
             db.connect();
-
         } catch (ClassNotFoundException ex) {
             System.out.println("An error occured while connecting to the database");
             ex.printStackTrace();
@@ -78,6 +80,18 @@ public class DB_Access {
             productList.add(new Ware(products.getString("Warenname")));
         }
         return productList;
+    }
+
+    public boolean deleteAltWaren(String productName) throws SQLException {
+        if (deleteAltWarenStat == null) {
+            deleteAltWarenStat = db.getConnection().prepareStatement(deleteAltWarenString);
+        }
+        if (productName.trim().equals("")) {
+            return false;
+        }
+        deleteAltWarenStat.setString(1, productName);
+        int result = deleteAltWarenStat.executeUpdate();
+        return result != 0;
     }
 
     public boolean insertBruchware(String productName, LocalDate datum, int anzahl) throws SQLException {
