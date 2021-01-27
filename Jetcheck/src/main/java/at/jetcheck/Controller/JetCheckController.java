@@ -9,7 +9,6 @@ import at.jetcheck.beans.Bruchware;
 import at.jetcheck.db.DB_Access;
 import at.jetcheck.beans.Ware;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -26,6 +25,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Request;
 
 /**
  *
@@ -39,7 +39,6 @@ public class JetCheckController extends HttpServlet {
     private String hashed_pass;
     private List<Ware> products = new ArrayList<>();
     private List<Bruchware> brokenproducts = new ArrayList<>(); // pls DB access for this one
-    
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -60,8 +59,7 @@ public class JetCheckController extends HttpServlet {
         }
         request.setAttribute("products", products);
         request.setAttribute("brokenProducts", brokenproducts); //is needed for the broken goods List
-        request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
-        
+        request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
     }
 
     public boolean checkPassword(String password) {
@@ -135,8 +133,8 @@ public class JetCheckController extends HttpServlet {
             else{
                 request.setAttribute("wrongPassword", true);
             }
-            
         }
+       
         /*
             Just for testing
             Inserts into the broken Products List
