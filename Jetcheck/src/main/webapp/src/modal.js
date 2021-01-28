@@ -1,6 +1,13 @@
 var pwModal = document.getElementById("pwModal");
 var itemModal = document.getElementById("itemModal");
 
+function openModal(modalname){
+    document.getElementById(modalname).style.display = "block";
+    
+}
+function closeModal(modalname){
+    document.getElementById(modalname).style.display = "none";
+}
 function closePWModal() {
     pwModal.style.display = "none";
 }

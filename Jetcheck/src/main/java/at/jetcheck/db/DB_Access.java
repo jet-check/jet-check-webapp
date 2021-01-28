@@ -23,17 +23,19 @@ public class DB_Access {
 
     private static DB_Access dbInstance = null;
     private DB_Database db;
-    private String insertProduct = "INSERT INTO public.\"Ware\" VALUES(?)";
-    private String getAllProductsString = "SELECT * FROM public.\"Ware\"";
-    private String deleteAltWarenString = "DELETE FROM public.\"Ware\" WHERE LOWER(\"Warenname\") = LOWER(?)";
-    private String insertBruchwareString = "INSERT INTO public.\"Bruchware\" VALUES(?, ?, ?)";
-    private String getAllBruchwareString = "SELECT * FROM public.\"Bruchware\"";
-
+    private String insertProduct = "INSERT INTO public.\"Ware\" VALUES(?);";
+    private String getAllProductsString = "SELECT * FROM public.\"Ware\";";
+    private String deleteAltWarenString = "DELETE FROM public.\"Ware\" WHERE LOWER(\"Warenname\") = LOWER(?);";
+    private String insertBruchwareString = "INSERT INTO public.\"Bruchware\" VALUES(?, ?, ?);";
+    private String getAllBruchwareString = "SELECT * FROM public.\"Bruchware\";";
+    private String deleteWare="DELETE FROM public.\"Ware\" WHERE LOWER(\"Warenname\") = LOWER(?);";
+    
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
     private PreparedStatement deleteAltWarenStat;
     private PreparedStatement insertBruchwareStat;
     private PreparedStatement getAllBruchwareStat;
+    private PreparedStatement deleteWareStat;
 
     public static DB_Access getInstance() {
         if (dbInstance == null) {
@@ -70,16 +72,23 @@ public class DB_Access {
         return false;
     }
 
-    public List<Ware> getAllProducts() throws SQLException {
+    public List<String> getAllProducts() throws SQLException {
         if (getAllProductsStat == null) {
             getAllProductsStat = db.getConnection().prepareStatement(getAllProductsString);
         }
-        List<Ware> productList = new ArrayList<>();
+        List<String> productList = new ArrayList<>();
         ResultSet products = getAllProductsStat.executeQuery();
         while (products.next()) {
-            productList.add(new Ware(products.getString("Warenname")));
+            productList.add(products.getString("Warenname"));
         }
         return productList;
+    }
+    
+    public void deleteWare(String warenname) throws SQLException{
+        if(deleteWareStat == null){
+            deleteWareStat = db.getConnection().prepareStatement(deleteWare);
+        }
+        deleteWareStat.setString(1, warenname);
     }
 
     public boolean deleteAltWaren(String productName) throws SQLException {

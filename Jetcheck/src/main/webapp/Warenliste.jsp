@@ -35,23 +35,22 @@
             <div class="contentPane">
                 <div class="contentHead">Waren</div>
                 <div class="contentButtonPane <c:if test="${!authorized}">hidden</c:if>">
-                        <button class="contentButton" onclick="openItemModal()">
+                        <button class="contentButton" onclick="openModal('itemModal')">
                             Hinzufügen
                         </button>
-                        <button class="contentButton">
+                        <button class="contentButton" onclick="openModal('deleteWarenModal')">
                             Löschen
                         </button>
                     </div>
                     <div class="contentEntryPane">
-                    <c:set var="count" value="${1}"></c:set>
-                    <c:forEach var="product" items="${products}">
+                    <form method="POST" action="JetCheckController">
+                        <c:forEach var="product" items="${products}">
                         <div class="contentEntry">
                             <div class="entryContent">
                                 <table>
                                     <tr>
                                         <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
-                                            <input type="checkbox" name="cb_${count}">
-                                            <c:set var="count" value="${count + 1}"></c:set> 
+                                            <input type="checkbox" name="cb_${product}">
                                         </td>
                                         <td class="valueCell">
                                             ${product}
@@ -61,6 +60,35 @@
                             </div>
                         </div>
                     </c:forEach>
+                        
+                        <div id="deleteWarenModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modalHeader">
+                            <div class="headerContent">
+                                Neue Ware
+                            </div>
+                            <span class="close" onclick="closeModal('deleteWarenModal')">&#10005</span>
+                    </div>
+                    <div class="modalValue">
+                        <center>
+                            <h3>
+                                Möchten Sie die ausgewählten Waren wirklich löschen?<br>
+                                Diese Aktion kann nicht rückgängig gemacht werden
+                            </h3>
+                                <div class="modalButtons">
+                                    <button class="confirmButton" onclick="submit()" name="deleteWaren">OK</button>
+                                    <button type="button" class="cancelButton" onclick="closeModal('deleteWarenModal')">Abbrechen</button>
+                                </div>
+                                <input type="hidden" name="warenliste">
+                           
+                        </center>
+
+                    </div>
+                </div>                  
+            </div>
+                         
+                    </form>
+                    
                 </div>  
             </div>
             <div class="buttonPane">
@@ -74,7 +102,7 @@
                         </c:otherwise>
                     </c:choose>
                 </button>
-                <button class="buttonEditAck button" name="editack"  onclick="<c:if test="${!authorized}">openPWModal()</c:if>">
+                <button class="buttonEditAck button" name="editack"  onclick="<c:if test="${!authorized}">openModal('pwModal')</c:if>">
                     <c:choose>
                         <c:when test="${authorized}">
                             Fertig
@@ -108,7 +136,7 @@
                                     </div>
                                     <div class="modalButtons">
                                         <button class="confirmButton" onclick="submit()">OK</button>
-                                        <button type="button" class="cancelButton" onclick="closePWModal()">Abbrechen</button>
+                                        <button type="button" class="cancelButton" onclick="closeModal('pwModal')">Abbrechen</button>
                                     </div>
                                     <input type="hidden" name="warenliste">
                                 </form>
@@ -123,7 +151,7 @@
                             <div class="headerContent">
                                 Neue Ware
                             </div>
-                            <span class="close" onclick="closeItemModal()">&#10005</span>
+                            <span class="close" onclick="closeModal('itemModal')">&#10005</span>
                     </div>
                     <div class="modalValue">
                         <center>
@@ -136,9 +164,9 @@
                                 </div>
                                 <div class="modalButtons">
                                     <button class="confirmButton" onclick="submit()">OK</button>
-                                    <button class="cancelButton" onclick="closeItemModal()">Abbrechen</button>
+                                    <button type="button" class="cancelButton" onclick="closeModal('itemModal')">Abbrechen</button>
                                 </div>
-                                <input type="hidden" name="bruchwarenliste">
+                                <input type="hidden" name="warenliste">
                             </form>
                         </center>
 

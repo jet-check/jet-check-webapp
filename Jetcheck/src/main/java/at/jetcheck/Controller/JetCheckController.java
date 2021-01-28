@@ -37,7 +37,7 @@ public class JetCheckController extends HttpServlet {
     private DB_Access dba;
     private static String password = "yourPassword";
     private String hashed_pass;
-    private List<Ware> products = new ArrayList<>();
+    private List<String> products = new ArrayList<>();
     private List<Bruchware> brokenproducts = new ArrayList<>(); // pls DB access for this one
 
     @Override
@@ -58,7 +58,7 @@ public class JetCheckController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.setCharacterEncoding("UTF-8");
+        //request.setCharacterEncoding("UTF-8");
 
         if (request.getParameter("warenliste") != null) {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
@@ -132,7 +132,7 @@ public class JetCheckController extends HttpServlet {
         /*
             Checks if password is correct
          */
-        request.setCharacterEncoding("UTF-8");
+        //request.setCharacterEncoding("UTF-8");
         if (request.getParameter("password") != null) {
             String pw = request.getParameter("password");
             if (checkPassword(pw)) {
@@ -175,6 +175,26 @@ public class JetCheckController extends HttpServlet {
                 request.setAttribute("insertError", true);
             }
         }
+        
+        if (request.getParameter("deleteWaren") != null){
+            List<String> productsToDelete = new ArrayList<>();
+            for(String product : products){
+                String cb = request.getParameter(String.format("cb_%s", product));
+                if(cb != null){
+                    System.out.println(product);
+                        productsToDelete.add(product);
+                }
+            }
+            for (String product : productsToDelete) {
+                try {
+                    dba.deleteWare(product);
+                    products.remove(product);
+                } catch (SQLException ex) {
+                    System.out.println("Ware existiert nicht oder hat noch Verknüpfungen");
+                }
+            }
+        }
+        
         processRequest(request, response);
     }
 
