@@ -27,7 +27,7 @@ public class DB_Access {
     private String getAllProductsString = "SELECT * FROM public.\"Ware\";";
     private String insertBruchwareString = "INSERT INTO public.\"Bruchware\" VALUES(?, ?, ?);";
     private String getAllBruchwareString = "SELECT * FROM public.\"Bruchware\";";
-    private String deleteWareString="DELETE FROM public.\"Ware\" WHERE LOWER(\"Warenname\") = LOWER(?);";
+    private String deleteWareString="DELETE FROM public.\"Ware\" WHERE LOWER(public.\"Ware\".\"Warenname\") = LOWER(?);";
     
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
