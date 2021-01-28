@@ -6,6 +6,7 @@
 package at.jetcheck.beans;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -13,6 +14,7 @@ import java.util.Objects;
  * @author Matio Tawdrous
  */
 public class Bruchware {
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private String warenname;
     private LocalDate datum;
     private int anzahl;
@@ -50,6 +52,9 @@ public class Bruchware {
         this.anzahl = anzahl;
     }
 
+    public String getDateFormatted(){
+        return datum.format(DTF);
+    }
     @Override
     public int hashCode() {
         int hash = 5;

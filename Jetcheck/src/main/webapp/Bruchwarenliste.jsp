@@ -13,17 +13,21 @@
         <nav id="mySidenav" class="sidenav">
 
             <img class="navPicture" src="src/logo.png" alt="Jet-Check Logo" >
-
-            <div class="navEntry">
-                <a href="#">Waren</a>
+            <div class="navItemContainer">
+                <div class="navEntry selected">
+                    <a href="WareSubmenu.jsp" class="navLink">Waren</a>
+                </div>
             </div>
-            <div class="navEntry">
-                <a href="#">Information</a>
+            <div class="navItemContainer">
+                <div class="navEntry">
+                    <a href="GebäckSubmenu.jsp" class="navLink">Gebäck</a>
+                </div>    
+            </div>    
+            <div class="navItemContainer">
+                <div class="navEntry">
+                    <a href="InfoSubmenu.jsp" class="navLink">Information</a>
+                </div>    
             </div>
-            <div class="navEntry">
-                <a href="#">Gebäck</a>
-            </div>
-
             <footer class="navFooter"></footer>
         </nav>
         <div class="content">
@@ -38,11 +42,28 @@
                         </button>
                     </div>
                     <div class="contentEntryPane">
-                    <c:forEach var="brokenProduct" items="${brokenProducts}">
+                    <c:set var="count" value="${1}"></c:set>
+                    <c:forEach var="product" items="${brokenProducts}">
                         <div class="contentEntry">
-                            <p class="entryContent">
-                                ${brokenProduct}
-                            </p>
+                            <div class="entryContent">
+                                <table style="width: 100%">
+                                    <tr>
+                                        <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
+                                            <input type="checkbox" name="cb_${count}">
+                                            <c:set var="count" value="${count + 1}"></c:set> 
+                                            </td>
+                                            <td class="valueCell">
+                                            ${product.getWarenname()}
+                                        </td>
+                                        <td class="amountCell">
+                                            ${product.getAnzahl()}
+                                        </td>
+                                        <td class="dateCell">
+                                            ${product.getDateFormatted()}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </c:forEach>
                 </div>  
@@ -94,6 +115,7 @@
                                         <button class="confirmButton" onclick="submit()">OK</button>
                                         <button class="cancelButton" onclick="closePWModal()">Abbrechen</button>
                                     </div>
+                            <input type="hidden" name="bruchwarenliste">
                                 </form>
                             </center>
                         </div>
@@ -107,29 +129,35 @@
                                 Neue Bruchware
                             </div>
                             <span class="close" onclick="closeItemModal()">&#10005</span>
-                    </div>
-                    <div class="modalValue">
-                        <center>
+                        </div>
+                        <div class="modalValue">
+                            <center>
                                 <form method="POST" action="JetCheckController" name="newBrokenProduct">
-                                <div class="inputForm">
-                                    <input class="inputField" type="text" name="brokenproductname" placeholder="Warenname"> <!-- cant have the name "productname" bc that fucks the doPost() -->
-                                    <br><br>
-                                    <input class="inputField" type="date" name="date" placeholder="Datum">
-                                    <br><br>
-                                    <input class="inputField" type="number" name="quantity" placeholder="Menge">
-                                    <br>
-                                    <label class="formError"><c:if test="${insertError}">Ware existiert bereits</c:if></label>
-                                </div>
-                                <div class="modalButtons">
-                                    <button class="confirmButton" onclick="submit()">OK</button>
-                                    <button class="cancelButton" onclick="closeItemModal()">Abbrechen</button>
-                                </div>
-                            </form>
-                        </center>
+                                    <div class="inputForm">
+                                        <Select class="inputField" name="brokenproductname">
+                                            <option>Warenname</option>
+                                            <c:forEach var="product" items="${products}">
+                                                <option>${product}</option>
+                                            </c:forEach>
+                                        </Select>
+                                        <br><br>
+                                        <input class="inputField" type="date" name="date" placeholder="Datum">
+                                        <br><br>
+                                        <input class="inputField" type="number" name="quantity" placeholder="Menge">
+                                        <br>
+                                        <label class="formError"><c:if test="${insertError}">Ware existiert bereits</c:if></label>
+                                    </div>
 
-                    </div>
-                </div>                  
-            </div>
+                                    <div class="modalButtons">
+                                        <button class="confirmButton" onclick="submit()">OK</button>
+                                        <button type="button" class="cancelButton" onclick="closeItemModal()">Abbrechen</button>
+                                    </div>
+                                    <input type="hidden" name="bruchwarenliste">
+                                </form>
+                            </center>
+                        </div>
+                    </div>                  
+                </div>
             <script src="src/modal.js" type="text/javascript"></script>
     </body>
 </html>

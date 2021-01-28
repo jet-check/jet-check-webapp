@@ -39,32 +39,40 @@ public class JetCheckController extends HttpServlet {
     private String hashed_pass;
     private List<Ware> products = new ArrayList<>();
     private List<Bruchware> brokenproducts = new ArrayList<>(); // pls DB access for this one
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         hashed_pass = encryptThisString(password);
         dba = DB_Access.getInstance();
-       
-        
+        try {
+            products = dba.getAllProducts();
+            brokenproducts = dba.getAllBruchware();
+        } catch (SQLException ex) {
+            Logger.getLogger(JetCheckController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        config.getServletContext().setAttribute("products", products);
+        config.getServletContext().setAttribute("brokenProducts", brokenproducts);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
-         try {
-            products = dba.getAllProducts();
-        } catch (SQLException ex) {
-            Logger.getLogger(JetCheckController.class.getName()).log(Level.SEVERE, null, ex);
+
+        if (request.getParameter("warenliste") != null) {
+            request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
+        } else if (request.getParameter("bruchwarenliste") != null) {
+            request.getRequestDispatcher("Bruchwarenliste.jsp").forward(request, response);
+        } else {
+            request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
         }
-        request.setAttribute("products", products);
-        request.setAttribute("brokenProducts", brokenproducts); //is needed for the broken goods List
-        request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
     }
 
     public boolean checkPassword(String password) {
         return hashed_pass.equals(encryptThisString(password));
     }
+
     public static String encryptThisString(String input) {
         try {
             // getInstance() method is called with algorithm SHA-512
@@ -127,25 +135,29 @@ public class JetCheckController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         if (request.getParameter("password") != null) {
             String pw = request.getParameter("password");
-            if(checkPassword(pw)){
+            if (checkPassword(pw)) {
                 request.setAttribute("authorized", true);
-            }
-            else{
+            } else {
                 request.setAttribute("wrongPassword", true);
             }
         }
-       
+
         /*
             Just for testing
             Inserts into the broken Products List
             Needs to be done for the db
-        */
+         */
         if (request.getParameter("brokenproductname") != null) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-DD");
             String productname = request.getParameter("brokenproductname");
             LocalDate date = LocalDate.parse(request.getParameter("date"), dtf);
             int quantity = Integer.parseInt(request.getParameter("quantity"));
-            brokenproducts.add(new Bruchware(productname,date,quantity));
+            brokenproducts.add(new Bruchware(productname, date, quantity));
+            try {
+                dba.insertBruchware(productname, date, quantity);
+            } catch (SQLException ex) {
+                System.out.println("Insert when fucking inserting a fucking broken product");
+            }
         }
         /*
             Inserts new product into database and updtates product list

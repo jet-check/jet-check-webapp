@@ -13,19 +13,24 @@
         <nav id="mySidenav" class="sidenav">
 
             <img class="navPicture" src="src/logo.png" alt="Jet-Check Logo" >
-
-            <div class="navEntry">
-                <a href="#">Waren</a>
+            <div class="navItemContainer">
+                <div class="navEntry selected">
+                    <a href="WareSubmenu.jsp" class="navLink">Waren</a>
+                </div>
             </div>
-            <div class="navEntry">
-                <a href="#">Information</a>
+            <div class="navItemContainer">
+                <div class="navEntry">
+                    <a href="GebäckSubmenu.jsp" class="navLink">Gebäck</a>
+                </div>    
+            </div>    
+            <div class="navItemContainer">
+                <div class="navEntry">
+                    <a href="InfoSubmenu.jsp" class="navLink">Information</a>
+                </div>    
             </div>
-            <div class="navEntry">
-                <a href="#">Gebäck</a>
-            </div>
-
             <footer class="navFooter"></footer>
         </nav>
+        
         <div class="content">
             <div class="contentPane">
                 <div class="contentHead">Waren</div>
@@ -38,11 +43,22 @@
                         </button>
                     </div>
                     <div class="contentEntryPane">
+                    <c:set var="count" value="${1}"></c:set>
                     <c:forEach var="product" items="${products}">
                         <div class="contentEntry">
-                            <p class="entryContent">
-                                ${product}
-                            </p>
+                            <div class="entryContent">
+                                <table>
+                                    <tr>
+                                        <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
+                                            <input type="checkbox" name="cb_${count}">
+                                            <c:set var="count" value="${count + 1}"></c:set> 
+                                        </td>
+                                        <td class="valueCell">
+                                            ${product}
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
                         </div>
                     </c:forEach>
                 </div>  
@@ -92,8 +108,9 @@
                                     </div>
                                     <div class="modalButtons">
                                         <button class="confirmButton" onclick="submit()">OK</button>
-                                        <button class="cancelButton" onclick="closePWModal()">Abbrechen</button>
+                                        <button type="button" class="cancelButton" onclick="closePWModal()">Abbrechen</button>
                                     </div>
+                                    <input type="hidden" name="warenliste">
                                 </form>
                             </center>
                         </div>
@@ -121,6 +138,7 @@
                                     <button class="confirmButton" onclick="submit()">OK</button>
                                     <button class="cancelButton" onclick="closeItemModal()">Abbrechen</button>
                                 </div>
+                                <input type="hidden" name="bruchwarenliste">
                             </form>
                         </center>
 

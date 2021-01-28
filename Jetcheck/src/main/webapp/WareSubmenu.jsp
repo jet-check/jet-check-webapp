@@ -12,39 +12,25 @@
         <nav id="mySidenav" class="sidenav">
 
             <img class="navPicture" src="src/logo.png" alt="Jet-Check Logo" >
-            <div class="navLinkContainer">
-                <div class="navEntrySelected">
-                    <div class="navLinkSelected">
-                        <form name="warenLink">
-                            <a onclick="submit()" href="#" >Waren</a>    
-                        </form>
-                        
-                    </div>
-
+            <div class="navItemContainer">
+                <div class="navEntry selected">
+                    <a href="WareSubmenu.jsp" class="navLink">Waren</a>
                 </div>
+            </div>
+            <div class="navItemContainer">
                 <div class="navEntry">
-                    <div class="navLink">
-                        <form name="informationLink">
-                            <a onclick="submit()" href="#">Information</a>    
-                        </form>
-                        
-                    </div>
-                </div>
+                    <a href="GebäckSubmenu.jsp" class="navLink">Gebäck</a>
+                </div>    
+            </div>    
+            <div class="navItemContainer">
                 <div class="navEntry">
-                    <div class="navLink">
-                        <form name="gebäackLink">
-                            <a onclick="submit()" href="#">Gebäck</a>
-                        </form>
-                        
-                    </div>
-
-                </div>
+                    <a href="InfoSubmenu.jsp" class="navLink">Information</a>
+                </div>    
             </div>
             <footer class="navFooter"></footer>
         </nav>
+        
         <div class="content">
-
-
             <table class="menuContainer">
                 <tr class="menuRow">
                     <td class="menuItem">
@@ -102,16 +88,15 @@
                 <tr class="menuRow">
                     <td class="menuItem">
                 <center>
-                    <form method="POST" action="?">
-                        <input type="submit" class="menuButton" value="Waren" name="productBtn">
+                    <form method="POST" action="JetCheckController">
+                        <input type="submit" class="menuButton" value="Waren" name="warenliste">  
                     </form>
-                    
                 </center>
                 </td>
                 <td class="menuItem">
                 <center>
                     <form method="POST" action="?">
-                        <input type="submit" class="menuButton" value="Lieferungen" name="delieveryBtn">
+                        <input type="submit" class="menuButton" value="Lieferungen" name="lieferliste">
                     </form>
                 </center>
 
@@ -119,7 +104,7 @@
                 <td class="menuItem">
                 <center>
                     <form method="POST" action="?">
-                        <input type="submit" class="menuButton" value="Bruchwaren" name="bruchwarenBtn">
+                        <input type="submit" class="menuButton" value="Bruchwaren" name="bruchwarenliste">
                     </form>
                 </center>
                 </td>

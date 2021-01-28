@@ -12,39 +12,25 @@
         <nav id="mySidenav" class="sidenav">
 
             <img class="navPicture" src="src/logo.png" alt="Jet-Check Logo" >
-            <div class="navLinkContainer">
+            <div class="navItemContainer">
+                <div class="navEntry selected">
+                    <a href="WareSubmenu.jsp" class="navLink">Waren</a>
+                </div>
+            </div>
+            <div class="navItemContainer">
                 <div class="navEntry">
-                    <div class="navLink">
-                        <form name="warenLink">
-                            <a onclick="submit()" href="#" >Waren</a>    
-                        </form>
-                        
-                    </div>
-
-                </div>
-                <div class="navEntrySelected">
-                    <div class="navLinkSelected">
-                        <form name="informationLink">
-                            <a onclick="submit()" href="#">Information</a>    
-                        </form>
-                        
-                    </div>
-                </div>
+                    <a href="GebäckSubmenu.jsp" class="navLink">Gebäck</a>
+                </div>    
+            </div>    
+            <div class="navItemContainer">
                 <div class="navEntry">
-                    <div class="navLink">
-                        <form name="gebäackLink">
-                            <a onclick="submit()" href="#">Gebäck</a>
-                        </form>
-                        
-                    </div>
-
-                </div>
+                    <a href="InfoSubmenu.jsp" class="navLink">Information</a>
+                </div>    
             </div>
             <footer class="navFooter"></footer>
         </nav>
+        
         <div class="content">
-
-
             <table class="menuContainer">
                 <tr class="menuRow">
                     <td class="menuItem">
