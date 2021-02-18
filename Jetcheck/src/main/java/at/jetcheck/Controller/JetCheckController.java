@@ -7,7 +7,6 @@ package at.jetcheck.Controller;
 
 import at.jetcheck.beans.Bruchware;
 import at.jetcheck.db.DB_Access;
-import at.jetcheck.beans.Ware;
 import at.jetcheck.bl.PasswordValidation;
 import java.io.IOException;
 import java.math.BigInteger;
@@ -115,9 +114,7 @@ public class JetCheckController extends HttpServlet {
         }
 
         /*
-            Just for testing
-            Inserts into the broken Products List
-            Needs to be done for the db
+            Inserts the broken products into the db
          */
         if (request.getParameter("brokenproductname") != null) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
