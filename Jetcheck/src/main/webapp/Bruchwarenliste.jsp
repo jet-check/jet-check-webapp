@@ -34,35 +34,66 @@
             <div class="contentPane">
                 <div class="contentHead">Bruchwaren</div>
                 <div class="contentButtonPane <c:if test="${!authorized}">hidden</c:if>">
-                        <button class="contentButton" onclick="openItemModal()">
+                        <button class="contentButton" onclick="openModal('itemModal')">
                             Hinzufügen
                         </button>
-                        <button class="contentButton">
+                        <button class="contentButton" onclick="openModal('exportModal')">
+                            Exportieren
+                        </button>
+                        <button class="contentButton" onclick="openModal('deleteModal')">
                             Löschen
                         </button>
+
                     </div>
                     <div class="contentEntryPane">
-                    <c:set var="count" value="${1}"></c:set>
                     <c:forEach var="product" items="${brokenProducts}">
                         <div class="contentEntry">
                             <div class="entryContent">
-                                <table style="width: 100%">
-                                    <tr>
-                                        <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
-                                            <input type="checkbox" name="cb_${count}">
-                                            <c:set var="count" value="${count + 1}"></c:set> 
+                                <form>
+                                    <table style="width: 100%">
+                                        <tr>
+                                            <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
+                                                <input type="checkbox" name="cb_${product.getWarenname()}">
+                                                </td>
+                                                <td class="valueCell">
+                                                ${product.getWarenname()}
                                             </td>
-                                            <td class="valueCell">
-                                            ${product.getWarenname()}
-                                        </td>
-                                        <td class="amountCell">
-                                            ${product.getAnzahl()}
-                                        </td>
-                                        <td class="dateCell">
-                                            ${product.getDateFormatted()}
-                                        </td>
-                                    </tr>
-                                </table>
+                                            <td class="amountCell">
+                                                ${product.getAnzahl()}
+                                            </td>
+                                            <td class="dateCell">
+                                                ${product.getDateFormatted()}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                            
+                                    <div id="deleteModal" class="modal">
+                                        <div class="modal-content">
+                                            <div class="modalHeader">
+                                                <div class="headerContent">
+                                                    Neue Ware
+                                                </div>
+                                                <span class="close" onclick="closeModal('deleteWarenModal')">&#10005</span>
+                                            </div>
+                                            <div class="modalValue">
+                                                <center>
+                                                    <h3>
+                                                        Möchten Sie die ausgewählten Waren wirklich löschen?<br>
+                                                        Diese Aktion kann nicht rückgängig gemacht werden
+                                                    </h3>
+                                                    <div class="modalButtons">
+                                                        <button class="confirmButton" onclick="submit()" name="deleteWaren">OK</button>
+                                                        <button type="button" class="cancelButton" onclick="closeModal('deleteModal')">Abbrechen</button>
+                                                    </div>
+                                                    <input type="hidden" name="bruchwarenliste">
+                                                </center>
+
+                                            </div>
+                                        </div>                  
+                                    </div>   
+
+                                </form>
+
                             </div>
                         </div>
                     </c:forEach>
@@ -99,7 +130,7 @@
                         <div class="headerContent">
                             Passwort eingeben
                         </div>
-                        <span class="close" onclick="closePWModal()">&#10005</span>
+                        <span class="close" onclick="closeModal('pwModal')">&#10005</span>
                     </div>
                     <div class="modalValue">
                         <center>
@@ -113,9 +144,9 @@
                                     </div>
                                     <div class="modalButtons">
                                         <button class="confirmButton" onclick="submit()">OK</button>
-                                        <button class="cancelButton" onclick="closePWModal()">Abbrechen</button>
+                                        <button class="cancelButton" onclick="closeModal('pwModal')">Abbrechen</button>
                                     </div>
-                            <input type="hidden" name="bruchwarenliste">
+                                    <input type="hidden" name="bruchwarenliste">
                                 </form>
                             </center>
                         </div>
@@ -128,7 +159,7 @@
                             <div class="headerContent">
                                 Neue Bruchware
                             </div>
-                            <span class="close" onclick="closeItemModal()">&#10005</span>
+                            <span class="close" onclick="closeModal('itemModal')">&#10005</span>
                         </div>
                         <div class="modalValue">
                             <center>
@@ -136,28 +167,55 @@
                                     <div class="inputForm">
                                         <Select class="inputField" name="brokenproductname">
                                             <option>Warenname</option>
-                                            <c:forEach var="product" items="${products}">
-                                                <option>${product}</option>
-                                            </c:forEach>
-                                        </Select>
-                                        <br><br>
-                                        <input class="inputField" type="date" name="date" placeholder="Datum">
-                                        <br><br>
-                                        <input class="inputField" type="number" name="quantity" placeholder="Menge">
-                                        <br>
-                                        <label class="formError"><c:if test="${insertError}">Ware existiert bereits</c:if></label>
-                                    </div>
+                                        <c:forEach var="product" items="${products}">
+                                            <option>${product}</option>
+                                        </c:forEach>
+                                    </Select>
+                                    <br><br>
+                                    <input class="inputField" type="date" name="date" data-date-format="DD MM YYYY" placeholder="Datum">
+                                    <br><br>
+                                    <input class="inputField" type="number" name="quantity" placeholder="Menge">
+                                    <br>
+                                    <label class="formError"><c:if test="${insertError}">Ware existiert bereits</c:if></label>
+                                </div>
 
-                                    <div class="modalButtons">
-                                        <button class="confirmButton" onclick="submit()">OK</button>
-                                        <button type="button" class="cancelButton" onclick="closeItemModal()">Abbrechen</button>
-                                    </div>
-                                    <input type="hidden" name="bruchwarenliste">
-                                </form>
-                            </center>
+                                <div class="modalButtons">
+                                    <button class="confirmButton" onclick="submit()">OK</button>
+                                    <button type="button" class="cancelButton" onclick="closeModal('itemModal')">Abbrechen</button>
+                                </div>
+                                <input type="hidden" name="bruchwarenliste">
+                            </form>
+                        </center>
+                    </div>
+                </div>                  
+            </div>
+            <div id="exportModal" class="modal">
+                <div class="modal-content">
+                    <div class="modalHeader">
+                        <div class="headerContent">
+                            Bruchwaren exportieren
                         </div>
-                    </div>                  
-                </div>
+                        <span class="close" onclick="closeModal('exportModal')">&#10005</span>
+                    </div>
+                    <div class="modalValue">
+                        <center>
+                            <form method="POST" action="JetCheckController" name="exportBrokenProducts">
+                                <div class="inputForm">
+                                    <label for="vonDate">Von:</label>
+                                    <input class="inputField" type="date" name="vonDate" data-date-format="DD MM YYYY" placeholder="Datum">
+                                    <label for="bisDate">Bis:</label>
+                                    <input class="inputField" type="date" name="bisDate" data-date-format="DD MM YYYY" placeholder="Datum">
+                                </div>
+                                <div class="modalButtons">
+                                    <button class="confirmButton" onclick="submit()">OK</button>
+                                    <button type="button" class="cancelButton" onclick="closeModal('exportModal')">Abbrechen</button>
+                                </div>
+                                <input type="hidden" name="bruchwarenliste">
+                            </form>
+                        </center>
+                    </div>
+                </div>                  
+            </div>
             <script src="src/modal.js" type="text/javascript"></script>
     </body>
 </html>

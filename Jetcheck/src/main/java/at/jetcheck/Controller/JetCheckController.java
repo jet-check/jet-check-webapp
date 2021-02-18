@@ -8,6 +8,7 @@ package at.jetcheck.Controller;
 import at.jetcheck.beans.Bruchware;
 import at.jetcheck.db.DB_Access;
 import at.jetcheck.beans.Ware;
+import at.jetcheck.bl.PasswordValidation;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -35,15 +36,13 @@ import javax.ws.rs.core.Request;
 public class JetCheckController extends HttpServlet {
 
     private DB_Access dba;
-    private static String password = "yourPassword";
-    private String hashed_pass;
     private List<String> products = new ArrayList<>();
     private List<Bruchware> brokenproducts = new ArrayList<>(); // pls DB access for this one
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        hashed_pass = encryptThisString(password);
+        
         dba = DB_Access.getInstance();
         try {
             products = dba.getAllProducts();
@@ -57,9 +56,12 @@ public class JetCheckController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        //request.setCharacterEncoding("UTF-8");
-
+            response.setContentType("text/html;charset=UTF-8");
+            request.setCharacterEncoding("UTF-8");
+            
+            request.getServletContext().setAttribute("products", products);
+            request.getServletContext().setAttribute("brokenProducts", brokenproducts);
+       
         if (request.getParameter("warenliste") != null) {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
         } else if (request.getParameter("bruchwarenliste") != null) {
@@ -67,40 +69,10 @@ public class JetCheckController extends HttpServlet {
         } else {
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
         }
+
     }
 
-    public boolean checkPassword(String password) {
-        return hashed_pass.equals(encryptThisString(password));
-    }
-
-    public static String encryptThisString(String input) {
-        try {
-            // getInstance() method is called with algorithm SHA-512
-            MessageDigest md = MessageDigest.getInstance("SHA-512");
-
-            // digest() method is called
-            // to calculate message digest of the input string
-            // returned as array of byte
-            byte[] messageDigest = md.digest(input.getBytes());
-
-            // Convert byte array into signum representation
-            BigInteger no = new BigInteger(1, messageDigest);
-
-            // Convert message digest into hex value
-            String hashtext = no.toString(16);
-
-            // Add preceding 0s to make it 32 bit
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-
-            // return the HashText
-            return hashtext;
-        } // For specifying wrong message digest algorithms
-        catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -132,10 +104,10 @@ public class JetCheckController extends HttpServlet {
         /*
             Checks if password is correct
          */
-        //request.setCharacterEncoding("UTF-8");
+        request.setCharacterEncoding("UTF-8");
         if (request.getParameter("password") != null) {
             String pw = request.getParameter("password");
-            if (checkPassword(pw)) {
+            if (PasswordValidation.checkPassword(pw)) {
                 request.setAttribute("authorized", true);
             } else {
                 request.setAttribute("wrongPassword", true);
@@ -148,15 +120,16 @@ public class JetCheckController extends HttpServlet {
             Needs to be done for the db
          */
         if (request.getParameter("brokenproductname") != null) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-DD");
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String productname = request.getParameter("brokenproductname");
             LocalDate date = LocalDate.parse(request.getParameter("date"), dtf);
             int quantity = Integer.parseInt(request.getParameter("quantity"));
-            brokenproducts.add(new Bruchware(productname, date, quantity));
+            System.out.println(productname);
             try {
                 dba.insertBruchware(productname, date, quantity);
+                brokenproducts = dba.getAllBruchware();
             } catch (SQLException ex) {
-                System.out.println("Insert when fucking inserting a fucking broken product");
+                ex.printStackTrace();
             }
         }
         /*
@@ -175,26 +148,26 @@ public class JetCheckController extends HttpServlet {
                 request.setAttribute("insertError", true);
             }
         }
-        
-        if (request.getParameter("deleteWaren") != null){
+
+        if (request.getParameter("deleteWaren") != null) {
             List<String> productsToDelete = new ArrayList<>();
-            for(String product : products){
+            for (String product : products) {
                 String cb = request.getParameter(String.format("cb_%s", product));
-                if(cb != null){
+                if (cb != null) {
                     System.out.println(product);
-                        productsToDelete.add(product);
+                    productsToDelete.add(product);
                 }
             }
             for (String product : productsToDelete) {
                 try {
                     dba.deleteWare(product);
-                    products.remove(product);
+                    products = dba.getAllProducts();
                 } catch (SQLException ex) {
                     System.out.println("Ware existiert nicht oder hat noch Verknüpfungen");
                 }
             }
         }
-        
+
         processRequest(request, response);
     }
 

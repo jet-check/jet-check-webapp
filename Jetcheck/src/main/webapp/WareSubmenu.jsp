@@ -95,7 +95,7 @@
                 </td>
                 <td class="menuItem">
                 <center>
-                    <form method="POST" action="?">
+                    <form method="POST" action="JetCheckController">
                         <input type="submit" class="menuButton" value="Lieferungen" name="lieferliste">
                     </form>
                 </center>
@@ -103,7 +103,7 @@
                 </td>
                 <td class="menuItem">
                 <center>
-                    <form method="POST" action="?">
+                    <form method="POST" action="JetCheckController">
                         <input type="submit" class="menuButton" value="Bruchwaren" name="bruchwarenliste">
                     </form>
                 </center>

@@ -98,8 +98,8 @@ public class DB_Access {
         if (insertBruchwareStat == null) {
             insertBruchwareStat = db.getConnection().prepareStatement(insertBruchwareString);
         }
-        Ware ware = new Ware(productName);
-        if (getAllProducts().contains(ware)) {
+        //Ware ware = new Ware(productName);
+        if (getAllProducts().contains(productName)) {
             insertBruchwareStat.setString(1, productName);
             insertBruchwareStat.setDate(2, Date.valueOf(datum));
             insertBruchwareStat.setInt(3, anzahl);
@@ -107,6 +107,9 @@ public class DB_Access {
             if (result != 0) {
                 return true;
             }
+        }
+        else{
+            System.out.println("Ware existiert nicht");
         }
         return false;
     }
