@@ -62,12 +62,10 @@ public class DB_Database {
     }
             
     public void loadProperties() {
-       
         dbUrl ="jdbc:postgresql://localhost:5432/JetCheck";
         dbDriver = "org.postgresql.Driver";
         dbUsername = "postgres";
         dbPassword = "postgres";
-        
     }
     
     
@@ -82,5 +80,4 @@ public class DB_Database {
             ex.printStackTrace();
         }
     }
-    
 }
