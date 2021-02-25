@@ -156,7 +156,7 @@ public class DB_Access {
             insertLieferungStat = db.getConnection().prepareStatement(insertLieferungString);
         }
         Warenlieferung warenlieferung = new Warenlieferung(productName, Lieferdatum, Ablaufdatum);
-        if (!getAllLieferungen().contains(warenlieferung)) {
+        if (!getAllLieferungen().contains(warenlieferung) && getAllProducts().contains(productName)) {
             insertLieferungStat.setString(3, productName);
             insertLieferungStat.setDate(2, Date.valueOf(Lieferdatum));
             insertLieferungStat.setDate(1, Date.valueOf(Ablaufdatum));
