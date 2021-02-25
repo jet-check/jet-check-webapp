@@ -22,18 +22,25 @@ public class DB_Access {
 
     private static DB_Access dbInstance = null;
     private DB_Database db;
-    private String insertProduct = "INSERT INTO public.\"Ware\" VALUES(?);";
+    private String insertProductString = "INSERT INTO public.\"Ware\" VALUES(?);";
     private String getAllProductsString = "SELECT * FROM public.\"Ware\";";
+    private String deleteProductString = "DELETE FROM public.\"Ware\" WHERE LOWER(public.\"Ware\".\"Warenname\") = LOWER(?);";
     private String insertBruchwareString = "INSERT INTO public.\"Bruchware\" VALUES(?, ?, ?);";
     private String getAllBruchwareString = "SELECT * FROM public.\"Bruchware\";";
-    private String deleteWareString="DELETE FROM public.\"Ware\" WHERE LOWER(public.\"Ware\".\"Warenname\") = LOWER(?);";
-    
+    private String deleteBruchwareString = "DELETE FROM public.\"Bruchware\" WHERE (LOWER(public.\"Bruchware\".\"Warename\") = LOWER(?)) AND (public.\"Bruchware\".\"Anzahl\" = (?)) AND (public.\"Bruchware\".\"Datum\" = (?);";
+    private String insertLieferungString = "INSERT INTO public.\"Warenlieferung\" VALUES (?, ?, ?);";
+    private String getAllLieferungString = "SELECT * FROM public.\"Warenlieferung\";";
+    private String deleteLiefeungString= "DELETE FROM public.\"Warenlieferung\" WHERE (LOWER(public.\"Warenlieferung\".\"Warenname\") = LOWER(?)) AND (public.\"Warenlieferung\".\"Lieferdatum\" = (?)) AND (public.\"Warenlieferung\".\"Ablaufdatum\" = (?);";
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
+    private PreparedStatement deleteProductStat;
     private PreparedStatement insertBruchwareStat;
     private PreparedStatement getAllBruchwareStat;
-    private PreparedStatement deleteWareStat;
-
+    private PreparedStatement deleteBruchwareStat;
+    private PreparedStatement insertLieferungStat;
+    private PreparedStatement getAllLieferungStat;
+    private PreparedStatement deleteLieferungStat;
+    
     public static DB_Access getInstance() {
         if (dbInstance == null) {
             dbInstance = new DB_Access();
@@ -56,7 +63,7 @@ public class DB_Access {
 
     public boolean insertNewProduct(String productName) throws SQLException {
         if (insertProductStat == null) {
-            insertProductStat = db.getConnection().prepareStatement(insertProduct);
+            insertProductStat = db.getConnection().prepareStatement(insertProductString);
         }
         if (productName.trim().equals("")) {
             return false;
@@ -82,14 +89,14 @@ public class DB_Access {
     }
     
     public boolean deleteWare(String productName) throws SQLException {
-        if (deleteWareStat == null) {
-            deleteWareStat = db.getConnection().prepareStatement(deleteWareString);
+        if (deleteProductStat == null) {
+            deleteProductStat = db.getConnection().prepareStatement(deleteProductString);
         }
         if (productName.trim().equals("")) {
             return false;
         }
-        deleteWareStat.setString(1, productName);
-        int result = deleteWareStat.executeUpdate();
+        deleteProductStat.setString(1, productName);
+        int result = deleteProductStat.executeUpdate();
         return result != 0;
     }
 
