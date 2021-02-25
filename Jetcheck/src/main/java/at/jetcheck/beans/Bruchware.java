@@ -87,6 +87,6 @@ public class Bruchware {
 
     @Override
     public String toString() {
-        return warenname + "," + datum + "," + anzahl;
+        return warenname + "," + datum.format(DTF) + "," + anzahl;
     }
 }

@@ -164,7 +164,6 @@ public class JetCheckController extends HttpServlet {
                 }
             }
         }
-
         processRequest(request, response);
     }
 

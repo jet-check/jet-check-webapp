@@ -6,6 +6,7 @@
 package at.jetcheck.db;
 
 import at.jetcheck.beans.Bruchware;
+import at.jetcheck.beans.Warenlieferung;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -31,6 +32,7 @@ public class DB_Access {
     private String insertLieferungString = "INSERT INTO public.\"Warenlieferung\" VALUES (?, ?, ?);";
     private String getAllLieferungString = "SELECT * FROM public.\"Warenlieferung\";";
     private String deleteLiefeungString= "DELETE FROM public.\"Warenlieferung\" WHERE (LOWER(public.\"Warenlieferung\".\"Warenname\") = LOWER(?)) AND (public.\"Warenlieferung\".\"Lieferdatum\" = (?)) AND (public.\"Warenlieferung\".\"Ablaufdatum\" = (?);";
+    
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
     private PreparedStatement deleteProductStat;
@@ -54,10 +56,10 @@ public class DB_Access {
             db.connect();
         } catch (ClassNotFoundException ex) {
             System.out.println("An error occured while connecting to the database");
-            ex.printStackTrace();
+            System.out.println(ex);
         } catch (SQLException ex) {
             System.out.println("An error occured while performing SQL operations");
-            ex.printStackTrace();
+            System.out.println(ex);
         }
     }
 
@@ -133,5 +135,68 @@ public class DB_Access {
             bruchwareList.add(new Bruchware(warenname, datum, anzahl));
         }
         return bruchwareList;
+    }
+    
+    public boolean deleteBruchware(String productName, LocalDate datum, int anzahl) throws SQLException {
+        if (deleteBruchwareStat == null) {
+            deleteBruchwareStat = db.getConnection().prepareStatement(deleteBruchwareString);
+        }
+        if (productName.trim().equals("") || anzahl == 0 || datum == null) {
+            return false;
+        }
+        deleteBruchwareStat.setString(1, productName);
+        deleteBruchwareStat.setDate(2, Date.valueOf(datum));
+        deleteBruchwareStat.setInt(3, anzahl);
+        int result = deleteBruchwareStat.executeUpdate();
+        return result != 0;
+    }
+    
+    public boolean insertLieferung(String productName, LocalDate Lieferdatum, LocalDate Ablaufdatum) throws SQLException {
+        if (insertLieferungStat == null) {
+            insertLieferungStat = db.getConnection().prepareStatement(insertLieferungString);
+        }
+        Warenlieferung warenlieferung = new Warenlieferung(productName, Lieferdatum, Ablaufdatum);
+        if (!getAllLieferungen().contains(warenlieferung)) {
+            insertLieferungStat.setString(3, productName);
+            insertLieferungStat.setDate(2, Date.valueOf(Lieferdatum));
+            insertLieferungStat.setDate(1, Date.valueOf(Ablaufdatum));
+            int result = insertLieferungStat.executeUpdate();
+            if (result != 0) {
+                return true;
+            }
+        }
+        else{
+            System.out.println("Ware existiert nicht");
+        }
+        return false;
+    }
+    
+    public List<Warenlieferung> getAllLieferungen() throws SQLException {
+        if (getAllLieferungStat == null) {
+            getAllLieferungStat = db.getConnection().prepareStatement(getAllLieferungString);
+        }
+        List<Warenlieferung> warenlieferungList = new ArrayList<>();
+        ResultSet warenlieferungen = getAllLieferungStat.executeQuery();
+        while (warenlieferungen.next()) {
+            String warenname = warenlieferungen.getString("Warenname");
+            LocalDate lieferdatum = LocalDate.parse(warenlieferungen.getDate("Lieferdatum").toString());
+            LocalDate ablaufdatum = LocalDate.parse(warenlieferungen.getDate("Ablaufdatum").toString());
+            warenlieferungList.add(new Warenlieferung(warenname, lieferdatum, ablaufdatum));
+        }
+        return warenlieferungList;
+    }
+    
+    public boolean deleteLieferung(String productName, LocalDate Lieferdatum, LocalDate Ablaufdatum) throws SQLException {
+        if (deleteLieferungStat == null) {
+            deleteLieferungStat = db.getConnection().prepareStatement(deleteLiefeungString);
+        }
+        if (productName.trim().equals("") || Lieferdatum == null || Ablaufdatum == null) {
+            return false;
+        }
+        deleteLieferungStat.setString(3, productName);
+        deleteLieferungStat.setDate(2, Date.valueOf(Lieferdatum));
+        deleteLieferungStat.setDate(1, Date.valueOf(Ablaufdatum));
+        int result = deleteLieferungStat.executeUpdate();
+        return result != 0;
     }
 }
