@@ -40,22 +40,23 @@
 
         <div class="content">
             <div class="contentPane">
-                <div class="contentHead">Waren</div>
-                <div class="contentButtonPane <c:if test="${!authorized}">hidden</c:if>">
-                        <button class="contentButton" onclick="openModal('itemModal')">
-                            Hinzufügen
-                        </button>
-                        <button class="contentButton" onclick="openModal('deleteWarenModal')">
-                            Löschen
+                <div class="contentHead">Sonderaufgaben</div>
+                <div class="contentButtonPane">
+                    <button class="contentButton" onclick="openModal('itemModal')">
+                        Hinzufügen
+                    </button>
+                    <button class="contentButton  <c:if test="${!authorized}">hidden</c:if>" onclick="openModal('deleteWarenModal')">
+                            Löschen 
                         </button>
                     </div>
                     <div class="contentEntryPane">
+
 
                     </div>  
                 </div>
                 <div class="buttonPane">
                     <form method="POST" action="JetCheckController" style="height: 2.9em">
-                    <button class="button buttonBackCancel" name="cancel">
+                        <button class="button buttonBackCancel" name="cancel">
                         <c:choose>
                             <c:when test="${authorized}">Abbrechen</c:when>
                             <c:otherwise>Zurück</c:otherwise>
@@ -85,7 +86,6 @@
             </div>
             <!-- The Modal -->
             <div id="pwModal" class="modal">
-
                 <!-- Modal content -->
                 <div class="modal-content">
                     <div class="modalHeader">
@@ -103,16 +103,44 @@
                                     <br>
                                     <label class="formError"><c:if test="${wrongPassword}">Falsches Passwort</c:if></label>                            
 
+                                    </div>
+                                    <div class="modalButtons">
+                                        <button class="confirmButton" onclick="submit()">OK</button>
+                                        <button type="button" class="cancelButton" onclick="closeModal('pwModal')">Abbrechen</button>
+                                    </div>
+                                    <input type="hidden" name="sonderaufgaben">
+                                </form>
+                            </center>
+                        </div>
+                    </div>
+                </div>
+                <div id="itemModal" class="modal">
+                    <div class="modal-content">
+                        <div class="modalHeader">
+                            <div class="headerContent">
+                                Sonderaufgabe eintragen
+                            </div>
+                            <span class="close" onclick="closeModal('itemModal')">&#10005</span>
+                        </div>
+                        <div class="modalValue">
+                            <center>
+                                <form method="POST" action="JetCheckController" name="newSpecial">
+                                    <div class="inputForm">
+
+                                        <input class="inputField" type="text" name="specialTask" placeholder="Aufgabe">
+                                        <br>
+                                        <label class="formError"><c:if test="${insertError}">Fehler aufgetreten</c:if></label>
                                 </div>
                                 <div class="modalButtons">
                                     <button class="confirmButton" onclick="submit()">OK</button>
-                                    <button type="button" class="cancelButton" onclick="closeModal('pwModal')">Abbrechen</button>
+                                    <button type="button" class="cancelButton" onclick="closeModal('itemModal')">Abbrechen</button>
                                 </div>
                                 <input type="hidden" name="warenliste">
                             </form>
                         </center>
+
                     </div>
-                </div>
+                </div>                  
             </div>
             <script src="src/modal.js" type="text/javascript"></script>
     </body>

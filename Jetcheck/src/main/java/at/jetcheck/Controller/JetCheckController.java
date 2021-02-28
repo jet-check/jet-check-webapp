@@ -71,8 +71,10 @@ public class JetCheckController extends HttpServlet {
             this.getServletContext().setAttribute("authorized", false);
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
         } else if (request.getParameter("infosubmenu") != null){
+            this.getServletContext().setAttribute("authorized", false);
             request.getRequestDispatcher("InfoSubmenu.jsp").forward(request, response);
         } else if (request.getParameter("gebäcksubmenu") != null) {
+            this.getServletContext().setAttribute("authorized", false);
             request.getRequestDispatcher("GebäckSubmenu.jsp").forward(request, response);
         }
         else {
@@ -163,6 +165,9 @@ public class JetCheckController extends HttpServlet {
             }
         }
 
+        /*
+            Deletes product from database
+        */
         if (request.getParameter("deleteWaren") != null) {
             List<String> productsToDelete = new ArrayList<>();
             for (String product : products) {
@@ -181,6 +186,7 @@ public class JetCheckController extends HttpServlet {
                 }
             }
         }
+        
         processRequest(request, response);
     }
 
