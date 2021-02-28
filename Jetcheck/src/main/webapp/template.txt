@@ -12,33 +12,27 @@
         <nav id="mySidenav" class="sidenav">
 
             <img class="navPicture" src="src/logo.png" alt="Jet-Check Logo" >
-            <div class="navLinkContainer">
-                <div class="navEntrySelected">
-                    <div class="navLinkSelected">
-                        <form name="warenLink">
-                            <a onclick="submit()" href="#" >Waren</a>    
-                        </form>
-                        
-                    </div>
-
-                </div>
+            <div class="navItemContainer">
                 <div class="navEntry">
-                    <div class="navLink">
-                        <form name="informationLink">
-                            <a onclick="submit()" href="#">Information</a>    
-                        </form>
-                        
-                    </div>
+                    <form method="POST" action="JetCheckController">
+                        <input class="navButton" type="submit" name="waresubmenu" value="Waren">
+                    </form>
                 </div>
-                <div class="navEntry">
-                    <div class="navLink">
-                        <form name="gebäackLink">
-                            <a onclick="submit()" href="#">Gebäck</a>
-                        </form>
-                        
-                    </div>
 
-                </div>
+            </div>
+            <div class="navItemContainer">
+                <div class="navEntry">
+                    <form method="POST" action="JetCheckController">
+                        <input class="navButton" type="submit" name="gebäcksubmenu" value="Gebäck">
+                    </form>
+                </div>    
+            </div>    
+            <div class="navItemContainer">
+                <div class="navEntry">
+                    <form method="POST" action="JetCheckController">
+                        <input class="navButton" type="submit" name="infosubmenu" value="Informationen">
+                    </form>
+                </div>    
             </div>
             <footer class="navFooter"></footer>
         </nav>

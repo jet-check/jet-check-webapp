@@ -65,9 +65,20 @@ public class JetCheckController extends HttpServlet {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
         } else if (request.getParameter("bruchwarenliste") != null) {
             request.getRequestDispatcher("Bruchwarenliste.jsp").forward(request, response);
-        } else {
+        } else if (request.getParameter("sonderaufgaben") != null){
+            request.getRequestDispatcher("SonderaufgabenListe.jsp").forward(request, response);
+        } else if (request.getParameter("waresubmenu") != null){
+            this.getServletContext().setAttribute("authorized", false);
+            request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
+        } else if (request.getParameter("infosubmenu") != null){
+            request.getRequestDispatcher("InfoSubmenu.jsp").forward(request, response);
+        } else if (request.getParameter("gebäcksubmenu") != null) {
+            request.getRequestDispatcher("GebäckSubmenu.jsp").forward(request, response);
+        }
+        else {
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
         }
+        
 
     }
 
@@ -107,12 +118,17 @@ public class JetCheckController extends HttpServlet {
         if (request.getParameter("password") != null) {
             String pw = request.getParameter("password");
             if (PasswordValidation.checkPassword(pw)) {
-                request.setAttribute("authorized", true);
+                this.getServletContext().setAttribute("authorized", true);
             } else {
                 request.setAttribute("wrongPassword", true);
             }
         }
-
+        /*
+            Sets the auhorization to false
+        */
+        if(request.getParameter("cancel") != null) {
+            this.getServletContext().setAttribute("authorized", false);
+        }
         /*
             Inserts the broken products into the db
          */
@@ -129,6 +145,7 @@ public class JetCheckController extends HttpServlet {
                 ex.printStackTrace();
             }
         }
+        
         /*
             Inserts new product into database and updtates product list
          */

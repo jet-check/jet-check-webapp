@@ -13,18 +13,25 @@
 
             <img class="navPicture" src="src/logo.png" alt="Jet-Check Logo" >
             <div class="navItemContainer">
-                <div class="navEntry selected">
-                    <a href="WareSubmenu.jsp" class="navLink">Waren</a>
+                <div class="navEntry">
+                    <form method="POST" action="JetCheckController">
+                        <input class="navButton" type="submit" name="waresubmenu" value="Waren">
+                    </form>
                 </div>
+
             </div>
             <div class="navItemContainer">
                 <div class="navEntry">
-                    <a href="GebäckSubmenu.jsp" class="navLink">Gebäck</a>
+                    <form method="POST" action="JetCheckController">
+                        <input class="navButton" type="submit" name="gebäcksubmenu" value="Gebäck">
+                    </form>
                 </div>    
             </div>    
             <div class="navItemContainer">
                 <div class="navEntry">
-                    <a href="InfoSubmenu.jsp" class="navLink">Information</a>
+                    <form method="POST" action="JetCheckController">
+                        <input class="navButton" type="submit" name="infosubmenu" value="Informationen">
+                    </form>
                 </div>    
             </div>
             <footer class="navFooter"></footer>

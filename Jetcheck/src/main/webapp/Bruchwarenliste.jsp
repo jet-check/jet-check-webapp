@@ -14,18 +14,25 @@
 
             <img class="navPicture" src="src/logo.png" alt="Jet-Check Logo" >
             <div class="navItemContainer">
-                <div class="navEntry selected">
-                    <a href="WareSubmenu.jsp" class="navLink">Waren</a>
+                <div class="navEntry">
+                    <form method="POST" action="JetCheckController">
+                        <input class="navButton" type="submit" name="waresubmenu" value="Waren">
+                    </form>
                 </div>
+
             </div>
             <div class="navItemContainer">
                 <div class="navEntry">
-                    <a href="GebäckSubmenu.jsp" class="navLink">Gebäck</a>
+                    <form method="POST" action="JetCheckController">
+                        <input class="navButton" type="submit" name="gebäcksubmenu" value="Gebäck">
+                    </form>
                 </div>    
             </div>    
             <div class="navItemContainer">
                 <div class="navEntry">
-                    <a href="InfoSubmenu.jsp" class="navLink">Information</a>
+                    <form method="POST" action="JetCheckController">
+                        <input class="navButton" type="submit" name="infosubmenu" value="Informationen">
+                    </form>
                 </div>    
             </div>
             <footer class="navFooter"></footer>
@@ -100,16 +107,24 @@
                 </div>  
             </div>
             <div class="buttonPane">
-                <button class="buttonBackCancel button" name="backcancel">
+                <form method="POST" action="JetCheckController" style="height: 2.9em">
+                    <button class="button buttonBackCancel" name="cancel">
+                        <c:choose>
+                            <c:when test="${authorized}">Abbrechen</c:when>
+                            <c:otherwise>Zurück</c:otherwise>
+                        </c:choose>
+                    </button>
                     <c:choose>
                         <c:when test="${authorized}">
-                            Abbrechen
+                            <input type="hidden" name="bruchwarenliste">
                         </c:when>
                         <c:otherwise>
-                            Zurück
+                            <input type="hidden" name="waresubmenu">
                         </c:otherwise>
                     </c:choose>
-                </button>
+
+
+                </form>
                 <button class="buttonEditAck button" name="editack"  onclick="<c:if test="${!authorized}">openPWModal()</c:if>">
                     <c:choose>
                         <c:when test="${authorized}">
