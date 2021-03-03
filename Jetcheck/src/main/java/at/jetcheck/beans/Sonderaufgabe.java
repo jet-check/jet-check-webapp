@@ -6,29 +6,32 @@
 package at.jetcheck.beans;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
  * @author Matio Tawdrous
  */
 public class Sonderaufgabe {
+
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     private String beschreibung;
     private LocalDate datum;
     private String Mitarbeiter;
     private String name;
-    private String id;
+    private int id;
 
-    public Sonderaufgabe(String beschreibung, LocalDate datum, String Mitarbeiter, String name, String id) {
+    public Sonderaufgabe(String beschreibung, LocalDate datum, String Mitarbeiter, String name, int id) {
         this.beschreibung = beschreibung;
         this.datum = datum;
         this.Mitarbeiter = Mitarbeiter;
         this.name = name;
-        this.id = id;
     }
 
     public Sonderaufgabe() {
+
     }
-    
+
     public String getBeschreibung() {
         return beschreibung;
     }
@@ -37,8 +40,8 @@ public class Sonderaufgabe {
         this.beschreibung = beschreibung;
     }
 
-    public LocalDate getDatum() {
-        return datum;
+    public String getDatum() {
+        return datum.format(DTF);
     }
 
     public void setDatum(LocalDate datum) {
@@ -61,11 +64,11 @@ public class Sonderaufgabe {
         this.name = name;
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 }

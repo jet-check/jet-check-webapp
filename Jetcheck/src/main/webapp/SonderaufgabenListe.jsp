@@ -50,13 +50,64 @@
                         </button>
                     </div>
                     <div class="contentEntryPane">
+                    <c:forEach var="task" items="${Sonderaufgaben}">
+                        <div class="contentEntry">
+                            <div class="entryContent">
+                                <form>
+                                    <table style="width: 100%">
+                                        <tr>
+                                            <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
+                                                <input type="checkbox" name="cb_${task.id}">
+                                            </td>
+                                            <td class="valueCell">
+                                                ${task.name}
+                                            </td>
+                                            <td class="descriptionCell">
+                                                ${task.beschreibung}
+                                            </td>
+                                            <td class="amountCell">
+                                                ${task.mitarbeiter}
+                                            </td>
+                                            <td class="dateCell">
+                                                ${task.getDatum()}
+                                            </td>
+                                        </tr>
+                                    </table>
 
+                                    <div id="deleteModal" class="modal">
+                                        <div class="modal-content">
+                                            <div class="modalHeader">
+                                                <div class="headerContent">
+                                                    Neue Ware
+                                                </div>
+                                                <span class="close" onclick="closeModal('deleteModal')">&#10005</span>
+                                            </div>
+                                            <div class="modalValue">
+                                                <center>
+                                                    <h3>not yet implemented
+                                                    </h3>
+                                                    <div class="modalButtons">
+                                                        <button class="confirmButton" onclick="submit()" name="deleteTasks">OK</button>
+                                                        <button type="button" class="cancelButton" onclick="closeModal('deleteModal')">Abbrechen</button>
+                                                    </div>
+                                                    <input type="hidden" name="sonderaufgaben">
+                                                </center>
 
-                    </div>  
-                </div>
-                <div class="buttonPane">
-                    <form method="POST" action="JetCheckController" style="height: 2.9em">
-                        <button class="button buttonBackCancel" name="cancel">
+                                            </div>
+                                        </div>                  
+                                    </div>   
+
+                                </form>
+
+                            </div>
+                        </div>
+                    </c:forEach>
+
+                </div>  
+            </div>
+            <div class="buttonPane">
+                <form method="POST" action="JetCheckController" style="height: 2.9em">
+                    <button class="button buttonBackCancel" name="cancel">
                         <c:choose>
                             <c:when test="${authorized}">Abbrechen</c:when>
                             <c:otherwise>Zurück</c:otherwise>
@@ -128,7 +179,7 @@
                                     <div class="inputForm">
                                         <input type="text" class="inputField" name="employeeName" placeholder="Ihr Name">
                                         <br>
-                                        <input type="date" class="inputField" name="specialDate" data-date-format="DD MM YYYY" placeholder="Datum"> 
+                                        <input type="date" class="inputField" name="date" data-date-format="DD MM YYYY" placeholder="Datum"> 
                                         <br>
                                         <input class="inputField" type="text" name="specialTask" placeholder="Aufgabe">
                                         <br>
@@ -138,7 +189,7 @@
                                     <button class="confirmButton" onclick="submit()">OK</button>
                                     <button type="button" class="cancelButton" onclick="closeModal('itemModal')">Abbrechen</button>
                                 </div>
-                                <input type="hidden" name="warenliste">
+                                <input type="hidden" name="sonderaufgaben">
                             </form>
                         </center>
 

@@ -6,6 +6,7 @@
 package at.jetcheck.Controller;
 
 import at.jetcheck.beans.Bruchware;
+import at.jetcheck.beans.Sonderaufgabe;
 import at.jetcheck.db.DB_Access;
 import at.jetcheck.bl.PasswordValidation;
 import java.io.IOException;
@@ -37,7 +38,8 @@ public class JetCheckController extends HttpServlet {
     private DB_Access dba;
     private List<String> products = new ArrayList<>();
     private List<Bruchware> brokenproducts = new ArrayList<>(); // pls DB access for this one
-
+    private List<Sonderaufgabe> specialTasks = new ArrayList<>();
+    
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -46,11 +48,13 @@ public class JetCheckController extends HttpServlet {
         try {
             products = dba.getAllProducts();
             brokenproducts = dba.getAllBruchware();
+            specialTasks = dba.getAllSonderaufgabe();
         } catch (SQLException ex) {
             Logger.getLogger(JetCheckController.class.getName()).log(Level.SEVERE, null, ex);
         }
         config.getServletContext().setAttribute("products", products);
         config.getServletContext().setAttribute("brokenProducts", brokenproducts);
+        config.getServletContext().setAttribute("Sonderaufgaben", specialTasks);
     }
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -60,6 +64,7 @@ public class JetCheckController extends HttpServlet {
             
             request.getServletContext().setAttribute("products", products);
             request.getServletContext().setAttribute("brokenProducts", brokenproducts);
+            request.getServletContext().setAttribute("Sonderaufgaben", specialTasks);
        
         if (request.getParameter("warenliste") != null) {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
@@ -186,8 +191,22 @@ public class JetCheckController extends HttpServlet {
                 }
             }
         }
-        if(request.getParameter("newSpecial") != null){
-            
+         if(request.getParameter("specialTask") != null) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+             
+            String employee = request.getParameter("employeeName");
+            String task = request.getParameter("specialTask");
+            String dateStr = request.getParameter("date");
+            System.out.println(dateStr);
+            LocalDate date = LocalDate.parse(dateStr, dtf);
+           
+            try {
+                dba.insertSonderaufgabe("", date, employee, task);
+                specialTasks = dba.getAllSonderaufgabe();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                System.out.println("Fehler bei einfuegen der Sonderaufgabe!");
+            }
         }
         
         processRequest(request, response);
