@@ -126,7 +126,10 @@
                             <center>
                                 <form method="POST" action="JetCheckController" name="newSpecial">
                                     <div class="inputForm">
-
+                                        <input type="text" class="inputField" name="employeeName" placeholder="Ihr Name">
+                                        <br>
+                                        <input type="date" class="inputField" name="specialDate" data-date-format="DD MM YYYY" placeholder="Datum"> 
+                                        <br>
                                         <input class="inputField" type="text" name="specialTask" placeholder="Aufgabe">
                                         <br>
                                         <label class="formError"><c:if test="${insertError}">Fehler aufgetreten</c:if></label>

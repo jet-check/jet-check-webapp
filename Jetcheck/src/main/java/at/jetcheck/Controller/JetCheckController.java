@@ -52,7 +52,7 @@ public class JetCheckController extends HttpServlet {
         config.getServletContext().setAttribute("products", products);
         config.getServletContext().setAttribute("brokenProducts", brokenproducts);
     }
-
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             response.setContentType("text/html;charset=UTF-8");
@@ -185,6 +185,9 @@ public class JetCheckController extends HttpServlet {
                     System.out.println("Ware existiert nicht oder hat noch Verknüpfungen");
                 }
             }
+        }
+        if(request.getParameter("newSpecial") != null){
+            
         }
         
         processRequest(request, response);

@@ -186,6 +186,7 @@ public class DB_Access {
         return warenlieferungList;
     }
     
+    
     public boolean deleteLieferung(String productName, LocalDate Lieferdatum, LocalDate Ablaufdatum) throws SQLException {
         if (deleteLieferungStat == null) {
             deleteLieferungStat = db.getConnection().prepareStatement(deleteLiefeungString);
