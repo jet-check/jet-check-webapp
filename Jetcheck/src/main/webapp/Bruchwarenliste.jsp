@@ -61,8 +61,8 @@
                                         <tr>
                                             <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
                                                 <input type="checkbox" name="cb_${product.getWarenname()}">
-                                                </td>
-                                                <td class="valueCell">
+                                            </td>
+                                            <td class="valueCell">
                                                 ${product.getWarenname()}
                                             </td>
                                             <td class="amountCell">
@@ -73,6 +73,7 @@
                                             </td>
                                         </tr>
                                     </table>
+<<<<<<< Updated upstream
                                             
                                     <div id="deleteModal" class="modal">
                                         <div class="modal-content">
@@ -99,11 +100,36 @@
                                         </div>                  
                                     </div>   
 
+=======
+>>>>>>> Stashed changes
                                 </form>
-
                             </div>
                         </div>
                     </c:forEach>
+                    <div id="deleteModal" class="modal">
+                        <div class="modal-content">
+                            <div class="modalHeader">
+                                <div class="headerContent">
+                                    Waren löschen
+                                </div>
+                                <span class="close" onclick="closeModal('deleteWarenModal')">&#10005</span>
+                            </div>
+                            <div class="modalValue">
+                                <center>
+                                    <h3>
+                                        Möchten Sie die ausgewählten Waren wirklich löschen?<br>
+                                        Diese Aktion kann nicht rückgängig gemacht werden
+                                    </h3>
+                                    <div class="modalButtons">
+                                        <button class="confirmButton" onclick="submit()" name="deleteBWaren">OK</button>
+                                        <button type="button" class="cancelButton" onclick="closeModal('deleteModal')">Abbrechen</button>
+                                    </div>
+                                    <input type="hidden" name="bruchwarenliste">
+                                </center>
+
+                            </div>
+                        </div>                  
+                    </div>
                 </div>  
             </div>
             <div class="buttonPane">
