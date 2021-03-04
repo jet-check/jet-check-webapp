@@ -40,7 +40,8 @@ public class JetCheckController extends HttpServlet {
     private List<String> products = new ArrayList<>();
     private List<Bruchware> brokenproducts = new ArrayList<>(); // pls DB access for this one
     private List<Sonderaufgabe> specialTasks = new ArrayList<>();
-    private List<Warenlieferung> deliveries = new ArrayList<>();
+    private List<Warenlieferung> deliveryList = new ArrayList<>();
+    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -51,14 +52,14 @@ public class JetCheckController extends HttpServlet {
             products = dba.getAllProducts();
             brokenproducts = dba.getAllBruchware();
             specialTasks = dba.getAllSonderaufgabe();
-            deliveries = dba.getAllLieferungen();
+            deliveryList = dba.getAllLieferungen();
         } catch (SQLException ex) {
             Logger.getLogger(JetCheckController.class.getName()).log(Level.SEVERE, null, ex);
         }
         config.getServletContext().setAttribute("products", products);
         config.getServletContext().setAttribute("brokenProducts", brokenproducts);
         config.getServletContext().setAttribute("Sonderaufgaben", specialTasks);
-        config.getServletContext().setAttribute("deliveries", deliveries);
+        config.getServletContext().setAttribute("deliveryList", deliveryList);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -68,8 +69,9 @@ public class JetCheckController extends HttpServlet {
 
         request.getServletContext().setAttribute("products", products);
         request.getServletContext().setAttribute("brokenProducts", brokenproducts);
-        request.getServletContext().setAttribute("Sonderaufgaben", specialTasks);
-        request.getServletContext().setAttribute("deliveries", deliveries);
+        request.setAttribute("Sonderaufgaben", specialTasks);
+        request.setAttribute("deliveryList", deliveryList);
+
         if (request.getParameter("warenliste") != null) {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
         } else if (request.getParameter("bruchwarenliste") != null) {
@@ -85,7 +87,7 @@ public class JetCheckController extends HttpServlet {
         } else if (request.getParameter("gebäcksubmenu") != null) {
             this.getServletContext().setAttribute("authorized", false);
             request.getRequestDispatcher("GebäckSubmenu.jsp").forward(request, response);
-        } else if (request.getParameter("lieferliste") != null) {
+        } else if (request.getParameter("lieferungenliste") != null) {
             request.getRequestDispatcher("LieferungenListe.jsp").forward(request, response);
         } else {
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
@@ -142,7 +144,6 @@ public class JetCheckController extends HttpServlet {
             Inserts the broken products into the db
          */
         if (request.getParameter("brokenproductname") != null) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             String productname = request.getParameter("brokenproductname");
             LocalDate date = LocalDate.parse(request.getParameter("date"), dtf);
             int quantity = Integer.parseInt(request.getParameter("quantity"));
@@ -150,8 +151,36 @@ public class JetCheckController extends HttpServlet {
             try {
                 dba.insertBruchware(productname, date, quantity);
                 brokenproducts = dba.getAllBruchware();
+                
+                for (Bruchware brokenproduct : brokenproducts) {
+                    System.out.println(brokenproduct);
+                }
             } catch (SQLException ex) {
                 ex.printStackTrace();
+            }
+        }
+        
+//          Delete Bruchwaren
+        
+          if(request.getParameter("deleteBWaren") != null) {
+            List<Bruchware> brokenProductsToBeDeleted = new ArrayList<>();
+            for (Bruchware brokenProduct : brokenproducts) {
+                String cb = request.getParameter(String.format("cb_%s", brokenProduct));
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + cb);
+                if (cb != null) {
+                    brokenProductsToBeDeleted.add(brokenProduct);
+                }
+            }
+            
+            for (Bruchware brokenProduct : brokenProductsToBeDeleted) {
+                try {
+                    boolean test = dba.deleteBruchware(brokenProduct.getWarenname(), brokenProduct.getDatum(), brokenProduct.getAnzahl());
+                    brokenproducts = dba.getAllBruchware();
+                    System.out.println(test);
+                } catch (SQLException ex) {
+                    System.out.println(ex.toString());
+                    System.out.println("Ware existiert nicht oder hat noch Verknüpfungen");
+                }
             }
         }
 
@@ -193,26 +222,9 @@ public class JetCheckController extends HttpServlet {
                 }
             }
         }
-        if (request.getParameter("deleteBWaren") != null) {
-            List<Bruchware> bruchwarenToDelete = new ArrayList<>();
-            for (Bruchware brokenproduct : brokenproducts) {
-                Bruchware cb = (Bruchware) request.getAttribute(String.format("cb_%s", brokenproduct));
-                if (cb != null) {
-                    System.out.println(cb);
-                    bruchwarenToDelete.add(brokenproduct);
-                }
-            }
-            for (Bruchware bruchware : bruchwarenToDelete) {
-                try {
-                    dba.deleteBruchware(bruchware.getWarenname(), bruchware.getDatum(), bruchware.getAnzahl());
-                    brokenproducts = dba.getAllBruchware();
-                } catch (SQLException ex) {
-                    System.out.println("Bruchware existiert nicht");
-                }
-            }
-        }
+        
+        // Inserts special task
         if (request.getParameter("specialTask") != null) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
             String employee = request.getParameter("employeeName");
             String task = request.getParameter("specialTask");
@@ -229,19 +241,45 @@ public class JetCheckController extends HttpServlet {
                 System.out.println("Fehler bei einfuegen der Sonderaufgabe!");
             }
         }
+
+        // Inserts Delivery
         if (request.getParameter("deliveryproductname") != null) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            String productname = request.getParameter("deliveryproductname");
-            LocalDate deliverydate = LocalDate.parse(request.getParameter("DeliveryDate"), dtf);
-            LocalDate ablaufdatum = LocalDate.parse(request.getParameter("ExpiryDate"), dtf);
+
+            String ware = request.getParameter("deliveryproductname");
+            String deliverydateStr = request.getParameter("DeliveryDate");
+            String expirydateStr = request.getParameter("ExpiryDate");
+            LocalDate deliverydate = LocalDate.parse(deliverydateStr, dtf);
+            LocalDate expirydate = LocalDate.parse(expirydateStr, dtf);
+
             try {
-                dba.insertLieferung(productname, deliverydate, ablaufdatum);
+                dba.insertLieferung(ware, deliverydate, expirydate);
+                deliveryList = dba.getAllLieferungen();
             } catch (SQLException ex) {
                 ex.printStackTrace();
-                System.out.println("Fehler bei einfuegen der Lieferung!");
+                System.out.println("Fehler beim Einfuegen der Lieferung!");
             }
         }
         
+        // Deletes Delivery
+        if(request.getParameter("deleteLieferung") != null) {
+            List<Warenlieferung> deliveriesToDelete = new ArrayList<>();
+            for (Warenlieferung delivery : deliveryList) {
+                String cb = request.getParameter(String.format("cb_%s", delivery));
+                if (cb != null) {
+                    deliveriesToDelete.add(delivery);
+                }
+            }
+            for (Warenlieferung lieferung : deliveriesToDelete) {
+                try {
+                    boolean test = dba.deleteLieferung(lieferung.getWarenname(), lieferung.getAblaufdatum(), lieferung.getLieferdatum());
+                    deliveryList = dba.getAllLieferungen();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    System.out.println("Lieferung existiert nicht oder hat noch Verknüpfungen");
+                }
+            }
+        }
+
         processRequest(request, response);
     }
 

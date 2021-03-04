@@ -29,14 +29,14 @@ public class DB_Access {
     private String deleteProductString = "DELETE FROM public.\"Ware\" WHERE LOWER(public.\"Ware\".\"Warenname\") = LOWER(?);";
     private String insertBruchwareString = "INSERT INTO public.\"Bruchware\" VALUES(?, ?, ?);";
     private String getAllBruchwareString = "SELECT * FROM public.\"Bruchware\";";
-    private String deleteBruchwareString = "DELETE FROM public.\"Bruchware\" WHERE (LOWER(public.\"Bruchware\".\"Warename\") = LOWER(?)) AND (public.\"Bruchware\".\"Anzahl\" = (?)) AND (public.\"Bruchware\".\"Datum\" = (?);";
+    private String deleteBruchwareString = "DELETE FROM public.\"Bruchware\" WHERE LOWER(public.\"Bruchware\".\"Warenname\") = LOWER(?) AND (public.\"Bruchware\".\"Datum\" = (?)) AND (public.\"Bruchware\".\"Anzahl\" = (?));";
     private String insertLieferungString = "INSERT INTO public.\"Warenlieferung\" VALUES (?, ?, ?);";
     private String getAllLieferungString = "SELECT * FROM public.\"Warenlieferung\";";
-    private String deleteLiefeungString = "DELETE FROM public.\"Warenlieferung\" WHERE (LOWER(public.\"Warenlieferung\".\"Warenname\") = LOWER(?)) AND (public.\"Warenlieferung\".\"Lieferdatum\" = (?)) AND (public.\"Warenlieferung\".\"Ablaufdatum\" = (?);";
+    private String deleteLieferungString = "DELETE FROM public.\"Warenlieferung\" WHERE (public.\"Warenlieferung\".\"Ablaufsdatum\" = (?)) AND (public.\"Warenlieferung\".\"Lieferdatum\" = (?)) AND LOWER(public.\"Warenlieferung\".\"Warenname\") = LOWER(?);";
     private String insertSonderaufgabeString = "INSERT INTO public.\"Sonderaufgabe\"(\"Beschreibung\", \"Datum\", \"Mitarbeiter\", \"Sonderaufgabenname\") VALUES (?, ?, ?, ?);";
     private String getAllSonderaufgabeString = "SELECT * FROM public.\"Sonderaufgabe\";";
     private String deleteSonderaufgabeString = "DELETE FROM public.\"Sonderaufgabe\" WHERE (\"Sonderaufgabe\".\"SonderaufgabenID\" = (?)) AND (LOWER(\"Sonderaufgabe\".\"Sonderaufgabenname\") = LOWER(?)) AND (LOWER(public.\"Sonderaufgabe\".\"Mitarbeiter) = LOWER(?)) AND (public.\"Sonderaufgabe\".\"Datum\" = (?))";
-    
+
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
     private PreparedStatement deleteProductStat;
@@ -49,7 +49,7 @@ public class DB_Access {
     private PreparedStatement insertSonderaufgabeStat;
     private PreparedStatement getAllSonderaufgabeStat;
     private PreparedStatement deleteSonderaufgabeStat;
-    
+
     public static DB_Access getInstance() {
         if (dbInstance == null) {
             dbInstance = new DB_Access();
@@ -96,7 +96,7 @@ public class DB_Access {
         }
         return productList;
     }
-    
+
     public boolean deleteWare(String productName) throws SQLException {
         if (deleteProductStat == null) {
             deleteProductStat = db.getConnection().prepareStatement(deleteProductString);
@@ -114,16 +114,16 @@ public class DB_Access {
             insertBruchwareStat = db.getConnection().prepareStatement(insertBruchwareString);
         }
         //Ware ware = new Ware(productName);
-        if (getAllProducts().contains(productName)) {
+        if (!getAllProducts().contains(productName)) {
             insertBruchwareStat.setString(1, productName);
             insertBruchwareStat.setDate(2, Date.valueOf(datum));
             insertBruchwareStat.setInt(3, anzahl);
+            
             int result = insertBruchwareStat.executeUpdate();
             if (result != 0) {
                 return true;
             }
-        }
-        else{
+        } else {
             System.out.println("Ware existiert nicht");
         }
         return false;
@@ -143,12 +143,13 @@ public class DB_Access {
         }
         return bruchwareList;
     }
-    
+
     public boolean deleteBruchware(String productName, LocalDate datum, int anzahl) throws SQLException {
         if (deleteBruchwareStat == null) {
             deleteBruchwareStat = db.getConnection().prepareStatement(deleteBruchwareString);
         }
         if (productName.trim().equals("") || anzahl == 0 || datum == null) {
+            System.out.println("?????????????????????????");
             return false;
         }
         deleteBruchwareStat.setString(1, productName);
@@ -157,27 +158,26 @@ public class DB_Access {
         int result = deleteBruchwareStat.executeUpdate();
         return result != 0;
     }
-    
+
     public boolean insertLieferung(String productName, LocalDate Lieferdatum, LocalDate Ablaufdatum) throws SQLException {
         if (insertLieferungStat == null) {
             insertLieferungStat = db.getConnection().prepareStatement(insertLieferungString);
         }
         Warenlieferung warenlieferung = new Warenlieferung(productName, Lieferdatum, Ablaufdatum);
         if (!getAllLieferungen().contains(warenlieferung) && getAllProducts().contains(productName)) {
-            insertLieferungStat.setString(3, productName);
-            insertLieferungStat.setDate(2, Date.valueOf(Lieferdatum));
             insertLieferungStat.setDate(1, Date.valueOf(Ablaufdatum));
+            insertLieferungStat.setDate(2, Date.valueOf(Lieferdatum));
+            insertLieferungStat.setString(3, productName);
             int result = insertLieferungStat.executeUpdate();
             if (result != 0) {
                 return true;
             }
-        }
-        else{
+        } else {
             System.out.println("Ware existiert nicht");
         }
         return false;
     }
-    
+
     public List<Warenlieferung> getAllLieferungen() throws SQLException {
         if (getAllLieferungStat == null) {
             getAllLieferungStat = db.getConnection().prepareStatement(getAllLieferungString);
@@ -192,22 +192,20 @@ public class DB_Access {
         }
         return warenlieferungList;
     }
-    
-    
+
     public boolean deleteLieferung(String productName, LocalDate Lieferdatum, LocalDate Ablaufdatum) throws SQLException {
         if (deleteLieferungStat == null) {
-            deleteLieferungStat = db.getConnection().prepareStatement(deleteLiefeungString);
+            deleteLieferungStat = db.getConnection().prepareStatement(deleteLieferungString);
         }
-        if (productName.trim().equals("") || Lieferdatum == null || Ablaufdatum == null) {
-            return false;
-        }
+        //Lieferdatum und Ablaufdatum verkehrt in jsp, daher reihenfolge hier geaendert :)
+        deleteLieferungStat.setDate(1, Date.valueOf(Lieferdatum));
+        deleteLieferungStat.setDate(2, Date.valueOf(Ablaufdatum));
         deleteLieferungStat.setString(3, productName);
-        deleteLieferungStat.setDate(2, Date.valueOf(Lieferdatum));
-        deleteLieferungStat.setDate(1, Date.valueOf(Ablaufdatum));
+
         int result = deleteLieferungStat.executeUpdate();
         return result != 0;
     }
-    
+
     public boolean insertSonderaufgabe(String beschreibung, LocalDate datum, String mitarbeiter, String name) throws SQLException {
         if (insertSonderaufgabeStat == null) {
             insertSonderaufgabeStat = db.getConnection().prepareStatement(insertSonderaufgabeString);
@@ -222,13 +220,12 @@ public class DB_Access {
             if (result != 0) {
                 return true;
             }
-        }
-        else{
+        } else {
             System.out.println("error beim sonderaufgaben einfügen db_access");
         }
         return false;
     }
-    
+
     public List<Sonderaufgabe> getAllSonderaufgabe() throws SQLException {
         if (getAllSonderaufgabeStat == null) {
             getAllSonderaufgabeStat = db.getConnection().prepareStatement(getAllSonderaufgabeString);
@@ -245,7 +242,7 @@ public class DB_Access {
         }
         return sonderaufgabeList;
     }
-    
+
     public boolean deleteSonderaufgabe(String beschreibung, LocalDate datum, String mitarbeiter, String name, int id) throws SQLException {
         if (deleteSonderaufgabeStat == null) {
             deleteSonderaufgabeStat = db.getConnection().prepareStatement(deleteSonderaufgabeString);

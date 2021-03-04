@@ -49,7 +49,7 @@
                         </button>
                     </div>
                     <div class="contentEntryPane">
-                        <form>
+                        <form action="./JetCheckController" method="POST">
                         <c:forEach var="product" items="${brokenProducts}">
                             <div class="contentEntry">
                                 <div class="entryContent">
@@ -57,7 +57,7 @@
                                     <table style="width: 100%">
                                         <tr>
                                             <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
-                                                <input type="checkbox" name="cb_${product.getWarenname()}">
+                                                <input type="checkbox" name="cb_${product}">
                                             </td>
                                             <td class="nameCell">
                                                 ${product.getWarenname()}
@@ -80,7 +80,7 @@
                                     <div class="headerContent">
                                         Waren löschen
                                     </div>
-                                    <span class="close" onclick="closeModal('deleteWarenModal')">&#10005</span>
+                                    <span class="close" onclick="closeModal('deleteModal')">&#10005</span>
                                 </div>
                                 <div class="modalValue">
                                     <center>

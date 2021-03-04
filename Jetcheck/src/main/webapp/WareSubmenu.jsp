@@ -103,7 +103,7 @@
                 <td class="menuItem">
                 <center>
                     <form method="POST" action="JetCheckController">
-                        <input type="submit" class="menuButton" value="Lieferungen" name="lieferliste">
+                        <input type="submit" class="menuButton" value="Lieferungen" name="lieferungenliste">
                     </form>
                 </center>
 

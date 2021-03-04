@@ -58,13 +58,13 @@
                                             <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
                                                 <input type="checkbox" name="cb_${delivery}">
                                             </td>
-                                            <td class="nameCell">
+                                            <td class="valueCell">
                                                 ${delivery.getWarenname()}
                                             </td>
-                                            <td class="col3Cell">
+                                            <td class="DeliveryDateCell">
                                                 ${delivery.getLieferdatum()}
                                             </td>
-                                            <td class="col4Cell">
+                                            <td class="ExpiryDateCell">
                                                 ${delivery.getAblaufdatum()}
                                             </td>
                                         </tr>
@@ -194,7 +194,7 @@
                                     <button class="confirmButton" onclick="submit()">OK</button>
                                     <button type="button" class="cancelButton" onclick="closeModal('itemModal')">Abbrechen</button>
                                 </div>
-                                <input type="hidden" name="lieferliste">
+                                <input type="hidden" name="lieferungenliste">
                             </form>
                         </center>
 
