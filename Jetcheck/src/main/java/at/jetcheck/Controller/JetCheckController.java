@@ -7,6 +7,7 @@ package at.jetcheck.Controller;
 
 import at.jetcheck.beans.Bruchware;
 import at.jetcheck.beans.Sonderaufgabe;
+import at.jetcheck.beans.Warenlieferung;
 import at.jetcheck.db.DB_Access;
 import at.jetcheck.bl.PasswordValidation;
 import java.io.IOException;
@@ -39,57 +40,58 @@ public class JetCheckController extends HttpServlet {
     private List<String> products = new ArrayList<>();
     private List<Bruchware> brokenproducts = new ArrayList<>(); // pls DB access for this one
     private List<Sonderaufgabe> specialTasks = new ArrayList<>();
-    
+    private List<Warenlieferung> deliveries = new ArrayList<>();
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        
+
         dba = DB_Access.getInstance();
         try {
             products = dba.getAllProducts();
             brokenproducts = dba.getAllBruchware();
             specialTasks = dba.getAllSonderaufgabe();
+            deliveries = dba.getAllLieferungen();
         } catch (SQLException ex) {
             Logger.getLogger(JetCheckController.class.getName()).log(Level.SEVERE, null, ex);
         }
         config.getServletContext().setAttribute("products", products);
         config.getServletContext().setAttribute("brokenProducts", brokenproducts);
         config.getServletContext().setAttribute("Sonderaufgaben", specialTasks);
+        config.getServletContext().setAttribute("deliveries", deliveries);
     }
-    
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-            response.setContentType("text/html;charset=UTF-8");
-            request.setCharacterEncoding("UTF-8");
-            
-            request.getServletContext().setAttribute("products", products);
-            request.getServletContext().setAttribute("brokenProducts", brokenproducts);
-            request.getServletContext().setAttribute("Sonderaufgaben", specialTasks);
-       
+        response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+
+        request.getServletContext().setAttribute("products", products);
+        request.getServletContext().setAttribute("brokenProducts", brokenproducts);
+        request.getServletContext().setAttribute("Sonderaufgaben", specialTasks);
+        request.getServletContext().setAttribute("deliveries", deliveries);
         if (request.getParameter("warenliste") != null) {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
         } else if (request.getParameter("bruchwarenliste") != null) {
             request.getRequestDispatcher("Bruchwarenliste.jsp").forward(request, response);
-        } else if (request.getParameter("sonderaufgaben") != null){
+        } else if (request.getParameter("sonderaufgaben") != null) {
             request.getRequestDispatcher("SonderaufgabenListe.jsp").forward(request, response);
-        } else if (request.getParameter("waresubmenu") != null){
+        } else if (request.getParameter("waresubmenu") != null) {
             this.getServletContext().setAttribute("authorized", false);
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
-        } else if (request.getParameter("infosubmenu") != null){
+        } else if (request.getParameter("infosubmenu") != null) {
             this.getServletContext().setAttribute("authorized", false);
             request.getRequestDispatcher("InfoSubmenu.jsp").forward(request, response);
         } else if (request.getParameter("gebäcksubmenu") != null) {
             this.getServletContext().setAttribute("authorized", false);
             request.getRequestDispatcher("GebäckSubmenu.jsp").forward(request, response);
-        }
-        else {
+        } else if (request.getParameter("lieferliste") != null) {
+            request.getRequestDispatcher("LieferungenListe.jsp").forward(request, response);
+        } else {
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
         }
-        
 
     }
-
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -132,8 +134,8 @@ public class JetCheckController extends HttpServlet {
         }
         /*
             Sets the auhorization to false
-        */
-        if(request.getParameter("cancel") != null) {
+         */
+        if (request.getParameter("cancel") != null) {
             this.getServletContext().setAttribute("authorized", false);
         }
         /*
@@ -152,7 +154,7 @@ public class JetCheckController extends HttpServlet {
                 ex.printStackTrace();
             }
         }
-        
+
         /*
             Inserts new product into database and updtates product list
          */
@@ -172,7 +174,7 @@ public class JetCheckController extends HttpServlet {
 
         /*
             Deletes product from database
-        */
+         */
         if (request.getParameter("deleteWaren") != null) {
             List<String> productsToDelete = new ArrayList<>();
             for (String product : products) {
@@ -191,22 +193,52 @@ public class JetCheckController extends HttpServlet {
                 }
             }
         }
-         if(request.getParameter("specialTask") != null) {
+        if (request.getParameter("deleteBWaren") != null) {
+            List<Bruchware> bruchwarenToDelete = new ArrayList<>();
+            for (Bruchware brokenproduct : brokenproducts) {
+                Bruchware cb = (Bruchware) request.getAttribute(String.format("cb_%s", brokenproduct));
+                if (cb != null) {
+                    System.out.println(cb);
+                    bruchwarenToDelete.add(brokenproduct);
+                }
+            }
+            for (Bruchware bruchware : bruchwarenToDelete) {
+                try {
+                    dba.deleteBruchware(bruchware.getWarenname(), bruchware.getDatum(), bruchware.getAnzahl());
+                    brokenproducts = dba.getAllBruchware();
+                } catch (SQLException ex) {
+                    System.out.println("Bruchware existiert nicht");
+                }
+            }
+        }
+        if (request.getParameter("specialTask") != null) {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-             
+
             String employee = request.getParameter("employeeName");
             String task = request.getParameter("specialTask");
             String dateStr = request.getParameter("date");
             String desc = request.getParameter("description");
             System.out.println(dateStr);
             LocalDate date = LocalDate.parse(dateStr, dtf);
-           
+
             try {
                 dba.insertSonderaufgabe(desc, date, employee, task);
                 specialTasks = dba.getAllSonderaufgabe();
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 System.out.println("Fehler bei einfuegen der Sonderaufgabe!");
+            }
+        }
+        if (request.getParameter("deliveryproductname") != null) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String productname = request.getParameter("deliveryproductname");
+            LocalDate deliverydate = LocalDate.parse(request.getParameter("DeliveryDate"), dtf);
+            LocalDate ablaufdatum = LocalDate.parse(request.getParameter("ExpiryDate"), dtf);
+            try {
+                dba.insertLieferung(productname, deliverydate, ablaufdatum);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                System.out.println("Fehler bei einfuegen der Lieferung!");
             }
         }
         

@@ -194,7 +194,7 @@
                                     <button class="confirmButton" onclick="submit()">OK</button>
                                     <button type="button" class="cancelButton" onclick="closeModal('itemModal')">Abbrechen</button>
                                 </div>
-                                <input type="hidden" name="warenliste">
+                                <input type="hidden" name="lieferliste">
                             </form>
                         </center>
 

@@ -187,7 +187,7 @@ public class DB_Access {
         while (warenlieferungen.next()) {
             String warenname = warenlieferungen.getString("Warenname");
             LocalDate lieferdatum = LocalDate.parse(warenlieferungen.getDate("Lieferdatum").toString());
-            LocalDate ablaufdatum = LocalDate.parse(warenlieferungen.getDate("Ablaufdatum").toString());
+            LocalDate ablaufdatum = LocalDate.parse(warenlieferungen.getDate("Ablaufsdatum").toString());
             warenlieferungList.add(new Warenlieferung(warenname, lieferdatum, ablaufdatum));
         }
         return warenlieferungList;

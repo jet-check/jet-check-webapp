@@ -26,6 +26,7 @@ public class Sonderaufgabe {
         this.datum = datum;
         this.Mitarbeiter = Mitarbeiter;
         this.name = name;
+        this.id = id;
     }
 
     public Sonderaufgabe() {
@@ -70,5 +71,10 @@ public class Sonderaufgabe {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return id + ":" + name + ", " + beschreibung + ", " + datum.format(DTF) + ", " + Mitarbeiter;
     }
 }

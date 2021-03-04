@@ -53,6 +53,6 @@ public class Warenlieferung {
 
     @Override
     public String toString() {
-        return warenname + "," + lieferdatum.format(DTF) + "," + ablaufdatum.format(DTF);
+        return warenname + ", " + lieferdatum.format(DTF) + ", " + ablaufdatum.format(DTF);
     }
 }

@@ -89,7 +89,7 @@
                                                         Diese Aktion kann nicht rückgängig gemacht werden
                                                     </h3>
                                                     <div class="modalButtons">
-                                                        <button class="confirmButton" onclick="submit()" name="deleteWaren">OK</button>
+                                                        <button class="confirmButton" onclick="submit()" name="deleteBWaren">OK</button>
                                                         <button type="button" class="cancelButton" onclick="closeModal('deleteModal')">Abbrechen</button>
                                                     </div>
                                                     <input type="hidden" name="bruchwarenliste">
