@@ -7,11 +7,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <link href="src/app.css" rel="stylesheet" type="text/css"/>
         <title>JET-Check</title>
-
     </head>
     <body>
         <nav id="mySidenav" class="sidenav">
-
             <img class="navPicture" src="src/logo.png" alt="Jet-Check Logo" >
             <div class="navItemContainer">
                 <div class="navEntry">
@@ -19,7 +17,6 @@
                         <input class="navButton" type="submit" name="waresubmenu" value="Waren">
                     </form>
                 </div>
-
             </div>
             <div class="navItemContainer">
                 <div class="navEntry">
@@ -50,86 +47,57 @@
                         <button class="contentButton" onclick="openModal('deleteModal')">
                             Löschen
                         </button>
-
                     </div>
                     <div class="contentEntryPane">
-                    <c:forEach var="product" items="${brokenProducts}">
-                        <div class="contentEntry">
-                            <div class="entryContent">
-                                <form>
+                        <form>
+                        <c:forEach var="product" items="${brokenProducts}">
+                            <div class="contentEntry">
+                                <div class="entryContent">
+
                                     <table style="width: 100%">
                                         <tr>
                                             <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
                                                 <input type="checkbox" name="cb_${product.getWarenname()}">
                                             </td>
-                                            <td class="valueCell">
+                                            <td class="nameCell">
                                                 ${product.getWarenname()}
                                             </td>
-                                            <td class="amountCell">
+                                            <td class="col3Cell">
                                                 ${product.getAnzahl()}
                                             </td>
-                                            <td class="dateCell">
+                                            <td class="col4Cell">
                                                 ${product.getDateFormatted()}
                                             </td>
                                         </tr>
-                                    </table>
-<<<<<<< Updated upstream
-                                            
-                                    <div id="deleteModal" class="modal">
-                                        <div class="modal-content">
-                                            <div class="modalHeader">
-                                                <div class="headerContent">
-                                                    Waren löschen
-                                                </div>
-                                                <span class="close" onclick="closeModal('deleteWarenModal')">&#10005</span>
-                                            </div>
-                                            <div class="modalValue">
-                                                <center>
-                                                    <h3>
-                                                        Möchten Sie die ausgewählten Waren wirklich löschen?<br>
-                                                        Diese Aktion kann nicht rückgängig gemacht werden
-                                                    </h3>
-                                                    <div class="modalButtons">
-                                                        <button class="confirmButton" onclick="submit()" name="deleteBWaren">OK</button>
-                                                        <button type="button" class="cancelButton" onclick="closeModal('deleteModal')">Abbrechen</button>
-                                                    </div>
-                                                    <input type="hidden" name="bruchwarenliste">
-                                                </center>
+                                    </table>   
 
-                                            </div>
-                                        </div>                  
-                                    </div>   
-
-=======
->>>>>>> Stashed changes
-                                </form>
-                            </div>
-                        </div>
-                    </c:forEach>
-                    <div id="deleteModal" class="modal">
-                        <div class="modal-content">
-                            <div class="modalHeader">
-                                <div class="headerContent">
-                                    Waren löschen
                                 </div>
-                                <span class="close" onclick="closeModal('deleteWarenModal')">&#10005</span>
                             </div>
-                            <div class="modalValue">
-                                <center>
-                                    <h3>
-                                        Möchten Sie die ausgewählten Waren wirklich löschen?<br>
-                                        Diese Aktion kann nicht rückgängig gemacht werden
-                                    </h3>
-                                    <div class="modalButtons">
-                                        <button class="confirmButton" onclick="submit()" name="deleteBWaren">OK</button>
-                                        <button type="button" class="cancelButton" onclick="closeModal('deleteModal')">Abbrechen</button>
+                        </c:forEach>
+                        <div id="deleteModal" class="modal">
+                            <div class="modal-content">
+                                <div class="modalHeader">
+                                    <div class="headerContent">
+                                        Waren löschen
                                     </div>
-                                    <input type="hidden" name="bruchwarenliste">
-                                </center>
-
-                            </div>
-                        </div>                  
-                    </div>
+                                    <span class="close" onclick="closeModal('deleteWarenModal')">&#10005</span>
+                                </div>
+                                <div class="modalValue">
+                                    <center>
+                                        <h3>
+                                            Möchten Sie die ausgewählten Waren wirklich löschen?<br>
+                                            Diese Aktion kann nicht rückgängig gemacht werden
+                                        </h3>
+                                        <div class="modalButtons">
+                                            <button class="confirmButton" onclick="submit()" name="deleteBWaren">OK</button>
+                                            <button type="button" class="cancelButton" onclick="closeModal('deleteModal')">Abbrechen</button>
+                                        </div>
+                                        <input type="hidden" name="bruchwarenliste">
+                                    </center>
+                                </div>
+                            </div>                  
+                        </div>
+                    </form>
                 </div>  
             </div>
             <div class="buttonPane">
@@ -148,8 +116,6 @@
                             <input type="hidden" name="waresubmenu">
                         </c:otherwise>
                     </c:choose>
-
-
                 </form>
                 <button class="buttonEditAck button" name="editack"  onclick="<c:if test="${!authorized}">openPWModal()</c:if>">
                     <c:choose>
@@ -164,7 +130,6 @@
             </div>
             <!-- The Modal -->
             <div id="pwModal" class="modal">
-
                 <!-- Modal content -->
                 <div class="modal-content">
                     <div class="modalHeader">
@@ -177,11 +142,9 @@
                         <center>
                             <form method="POST" action="JetCheckController" name="passwordInput">
                                 <div class="inputForm">
-
                                     <input class="inputField" type="password" name="password" placeholder="Passwort">
                                     <br>
                                     <label class="formError"><c:if test="${wrongPassword}">Falsches Passwort</c:if></label>                            
-
                                     </div>
                                     <div class="modalButtons">
                                         <button class="confirmButton" onclick="submit()">OK</button>
@@ -193,7 +156,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="itemModal" class="modal">
                     <div class="modal-content">
                         <div class="modalHeader">
@@ -219,7 +181,6 @@
                                     <br>
                                     <label class="formError"><c:if test="${insertError}">Ware existiert bereits</c:if></label>
                                 </div>
-
                                 <div class="modalButtons">
                                     <button class="confirmButton" onclick="submit()">OK</button>
                                     <button type="button" class="cancelButton" onclick="closeModal('itemModal')">Abbrechen</button>

@@ -161,16 +161,19 @@ Allgemeines Farbschema:
 .cbCell{
     width: 2em;
 }
-.valueCell{
+.nameCell{
+    width: 55em;
+}
+.col1Cell{
     width: 20em;
 }
-.descriptionCell{
+.col2Cell{
     width: 35em;
 }
-.amountCell{
+.col3Cell{
     width: 20em;
 }
-.dateCell{
+.col4Cell{
     width: 10em;
 }
 .buttonPane{ 

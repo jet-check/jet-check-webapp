@@ -58,13 +58,13 @@
                                             <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
                                                 <input type="checkbox" name="cb_${delivery}">
                                             </td>
-                                            <td class="valueCell">
+                                            <td class="nameCell">
                                                 ${delivery.getWarenname()}
                                             </td>
-                                            <td class="DeliveryDateCell">
+                                            <td class="col3Cell">
                                                 ${delivery.getLieferdatum()}
                                             </td>
-                                            <td class="ExpiryDateCell">
+                                            <td class="col4Cell">
                                                 ${delivery.getAblaufdatum()}
                                             </td>
                                         </tr>

@@ -58,7 +58,7 @@
                                             <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
                                                 <input type="checkbox" name="cb_${product}">
                                             </td>
-                                            <td class="valueCell">
+                                            <td class="nameCell">
                                                 ${product}
                                             </td>
                                         </tr>

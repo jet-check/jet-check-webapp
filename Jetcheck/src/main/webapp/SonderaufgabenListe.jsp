@@ -60,16 +60,16 @@
                                             <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
                                                 <input type="checkbox" name="cb_${task.id}">
                                             </td>
-                                            <td class="valueCell">
+                                            <td class="col1Cell">
                                                 ${task.name}
                                             </td>
-                                            <td class="descriptionCell">
+                                            <td class="col2Cell">
                                                 ${task.beschreibung}
                                             </td>
-                                            <td class="amountCell">
+                                            <td class="col3Cell">
                                                 ${task.mitarbeiter}
                                             </td>
-                                            <td class="dateCell">
+                                            <td class="col4Cell">
                                                 ${task.getDatum()}
                                             </td>
                                         </tr>
