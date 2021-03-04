@@ -197,11 +197,12 @@ public class JetCheckController extends HttpServlet {
             String employee = request.getParameter("employeeName");
             String task = request.getParameter("specialTask");
             String dateStr = request.getParameter("date");
+            String desc = request.getParameter("description");
             System.out.println(dateStr);
             LocalDate date = LocalDate.parse(dateStr, dtf);
            
             try {
-                dba.insertSonderaufgabe("", date, employee, task);
+                dba.insertSonderaufgabe(desc, date, employee, task);
                 specialTasks = dba.getAllSonderaufgabe();
             } catch (SQLException ex) {
                 ex.printStackTrace();

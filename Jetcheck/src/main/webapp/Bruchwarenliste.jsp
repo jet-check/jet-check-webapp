@@ -78,7 +78,7 @@
                                         <div class="modal-content">
                                             <div class="modalHeader">
                                                 <div class="headerContent">
-                                                    Neue Ware
+                                                    Waren löschen
                                                 </div>
                                                 <span class="close" onclick="closeModal('deleteWarenModal')">&#10005</span>
                                             </div>
@@ -172,7 +172,7 @@
                     <div class="modal-content">
                         <div class="modalHeader">
                             <div class="headerContent">
-                                Neue Bruchware
+                                Neuer Eintrag
                             </div>
                             <span class="close" onclick="closeModal('itemModal')">&#10005</span>
                         </div>

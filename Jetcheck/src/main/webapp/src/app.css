@@ -162,7 +162,10 @@ Allgemeines Farbschema:
     width: 2em;
 }
 .valueCell{
-    width: 55em;
+    width: 20em;
+}
+.descriptionCell{
+    width: 35em;
 }
 .amountCell{
     width: 20em;

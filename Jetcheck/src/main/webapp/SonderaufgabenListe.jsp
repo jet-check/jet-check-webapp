@@ -54,6 +54,7 @@
                         <div class="contentEntry">
                             <div class="entryContent">
                                 <form>
+                                 
                                     <table style="width: 100%">
                                         <tr>
                                             <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
@@ -73,7 +74,7 @@
                                             </td>
                                         </tr>
                                     </table>
-
+                                            
                                     <div id="deleteModal" class="modal">
                                         <div class="modal-content">
                                             <div class="modalHeader">
@@ -178,10 +179,12 @@
                                 <form method="POST" action="JetCheckController" name="newSpecial">
                                     <div class="inputForm">
                                         <input type="text" class="inputField" name="employeeName" placeholder="Ihr Name">
-                                        <br>
+                                        <br><br>
                                         <input type="date" class="inputField" name="date" data-date-format="DD MM YYYY" placeholder="Datum"> 
-                                        <br>
+                                        <br><br>
                                         <input class="inputField" type="text" name="specialTask" placeholder="Aufgabe">
+                                        <br><br>
+                                        <input class="inputField descField" type="text" name="description" placeholder="kurze Beschreibung">
                                         <br>
                                         <label class="formError"><c:if test="${insertError}">Fehler aufgetreten</c:if></label>
                                 </div>
