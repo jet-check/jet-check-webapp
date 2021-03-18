@@ -187,6 +187,7 @@
                     </div>
                 </div>                  
             </div>
+        </div>
             <script src="src/modal.js" type="text/javascript"></script>
     </body>
 </html>

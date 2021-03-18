@@ -39,15 +39,22 @@
 
         <div class="content">
             <div class="contentPane">
-                <div class="contentHead"><Title></div>
-                    <div class="contentEntryPane">
-                   
+                <div class="contentHead">Dienstplan</div>
+                <div class="contentButtonPane <c:if test="${!authorized}">hidden</c:if>">
+                        <button class="contentButton" onclick="openModal('itemModal')">
+                            Hinzufügen
+                        </button>
+                    </div>
+                    <div class="contentEntryPane filePane">
+                        <center>
+                            <iframe class="fileView" src="https://drive.google.com/file/d/1wutGHGMgqdRkoYjrohLak_cdXA8rJkrw/preview"></iframe>
+                        </center>
 
-                </div>  
-            </div>
-            <div class="buttonPane">
-                <form method="POST" action="JetCheckController" style="height: 2.9em">
-                    <button class="button buttonBackCancel" name="cancel">
+                    </div>  
+                </div>
+                <div class="buttonPane">
+                    <form method="POST" action="JetCheckController" style="height: 2.9em">
+                        <button class="button buttonBackCancel" name="cancel">
                         <c:choose>
                             <c:when test="${authorized}">Abbrechen</c:when>
                             <c:otherwise>Zurück</c:otherwise>
@@ -75,8 +82,6 @@
                     </c:choose>
                 </button>
             </div>
-            
-                
-            <script src="src/modal.js" type="text/javascript"></script>
+        </div>
     </body>
 </html>
