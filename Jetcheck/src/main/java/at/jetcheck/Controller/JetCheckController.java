@@ -74,6 +74,7 @@ public class JetCheckController extends HttpServlet {
         request.getServletContext().setAttribute("brokenProducts", brokenproducts);
         request.setAttribute("Sonderaufgaben", specialTasks);
         request.setAttribute("deliveryList", deliveryList);
+        request.setAttribute("expireToday", expireList);
 
         if (request.getParameter("warenliste") != null) {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
@@ -233,11 +234,12 @@ public class JetCheckController extends HttpServlet {
             String task = request.getParameter("specialTask");
             String dateStr = request.getParameter("date");
             String desc = request.getParameter("description");
+            int id = specialTasks.size() + 1;
             System.out.println(dateStr);
             LocalDate date = LocalDate.parse(dateStr, dtf);
 
             try {
-                dba.insertSonderaufgabe(desc, date, employee, task);
+                dba.insertSonderaufgabe(desc, date, employee, task, id);
                 specialTasks = dba.getAllSonderaufgabe();
             } catch (SQLException ex) {
                 ex.printStackTrace();

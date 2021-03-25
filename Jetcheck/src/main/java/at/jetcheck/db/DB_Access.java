@@ -33,7 +33,7 @@ public class DB_Access {
     private String insertLieferungString = "INSERT INTO public.\"Warenlieferung\" VALUES (?, ?, ?);";
     private String getAllLieferungString = "SELECT * FROM public.\"Warenlieferung\";";
     private String deleteLieferungString = "DELETE FROM public.\"Warenlieferung\" WHERE (public.\"Warenlieferung\".\"Ablaufsdatum\" = (?)) AND (public.\"Warenlieferung\".\"Lieferdatum\" = (?)) AND LOWER(public.\"Warenlieferung\".\"Warenname\") = LOWER(?);";
-    private String insertSonderaufgabeString = "INSERT INTO public.\"Sonderaufgabe\"(\"Beschreibung\", \"Datum\", \"Mitarbeiter\", \"Sonderaufgabenname\") VALUES (?, ?, ?, ?);";
+    private String insertSonderaufgabeString = "INSERT INTO public.\"Sonderaufgabe\"(\"Beschreibung\", \"Datum\", \"Mitarbeiter\", \"Sonderaufgabenname\", \"SonderaufgabenID\") VALUES (?, ?, ?, ?, ?);";
     private String getAllSonderaufgabeString = "SELECT * FROM public.\"Sonderaufgabe\";";
     private String deleteSonderaufgabeString = "DELETE FROM public.\"Sonderaufgabe\" WHERE (\"Sonderaufgabe\".\"SonderaufgabenID\" = (?)) AND (LOWER(\"Sonderaufgabe\".\"Sonderaufgabenname\") = LOWER(?)) AND (LOWER(public.\"Sonderaufgabe\".\"Mitarbeiter) = LOWER(?)) AND (public.\"Sonderaufgabe\".\"Datum\" = (?))";
     
@@ -206,18 +206,17 @@ public class DB_Access {
         return result != 0;
     }
 
-    public boolean insertSonderaufgabe(String beschreibung, LocalDate datum, String mitarbeiter, String name) throws SQLException {
+    public boolean insertSonderaufgabe(String beschreibung, LocalDate datum, String mitarbeiter, String name, int id) throws SQLException {
         if (insertSonderaufgabeStat == null) {
             insertSonderaufgabeStat = db.getConnection().prepareStatement(insertSonderaufgabeString);
         }
-        Sonderaufgabe sonderaufgabe = new Sonderaufgabe(beschreibung, datum, mitarbeiter, name, 0);
+        Sonderaufgabe sonderaufgabe = new Sonderaufgabe(beschreibung, datum, mitarbeiter, name, id);
         if (!getAllSonderaufgabe().contains(sonderaufgabe)) {
             insertSonderaufgabeStat.setString(1, beschreibung);
             insertSonderaufgabeStat.setDate(2, Date.valueOf(datum));
             insertSonderaufgabeStat.setString(3, mitarbeiter);
             insertSonderaufgabeStat.setString(4, name);
-//            int id = getAllSonderaufgabe().size();
-//            insertSonderaufgabeStat.setInt(5, id);
+            insertSonderaufgabeStat.setInt(5, id);
             int result = insertSonderaufgabeStat.executeUpdate();
             if (result != 0) {
                 return true;
@@ -239,7 +238,7 @@ public class DB_Access {
             LocalDate datum = LocalDate.parse(sonderaufgaben.getDate("Datum").toString());
             String mitarbeiter = sonderaufgaben.getString("Mitarbeiter");
             String name = sonderaufgaben.getString("Sonderaufgabenname");
-            int id = sonderaufgaben.getInt("id");
+            int id = sonderaufgaben.getInt("SonderaufgabenID");
             sonderaufgabeList.add(new Sonderaufgabe(beschreibung, datum, mitarbeiter, name, id));
         }
         return sonderaufgabeList;
