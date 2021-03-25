@@ -42,7 +42,8 @@ public class JetCheckController extends HttpServlet {
     private List<Sonderaufgabe> specialTasks = new ArrayList<>();
     private List<Warenlieferung> deliveryList = new ArrayList<>();
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-
+    private List<Warenlieferung> expireList = new ArrayList<>();
+    
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -53,6 +54,7 @@ public class JetCheckController extends HttpServlet {
             brokenproducts = dba.getAllBruchware();
             specialTasks = dba.getAllSonderaufgabe();
             deliveryList = dba.getAllLieferungen();
+            expireList = dba.getExpireToday();
         } catch (SQLException ex) {
             Logger.getLogger(JetCheckController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -60,6 +62,7 @@ public class JetCheckController extends HttpServlet {
         config.getServletContext().setAttribute("brokenProducts", brokenproducts);
         config.getServletContext().setAttribute("Sonderaufgaben", specialTasks);
         config.getServletContext().setAttribute("deliveryList", deliveryList);
+        config.getServletContext().setAttribute("expireToday", expireList);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -92,7 +95,7 @@ public class JetCheckController extends HttpServlet {
         } else {
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
         }
-
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -254,6 +257,7 @@ public class JetCheckController extends HttpServlet {
             try {
                 dba.insertLieferung(ware, deliverydate, expirydate);
                 deliveryList = dba.getAllLieferungen();
+                expireList = dba.getExpireToday();
             } catch (SQLException ex) {
                 ex.printStackTrace();
                 System.out.println("Fehler beim Einfuegen der Lieferung!");
@@ -273,13 +277,13 @@ public class JetCheckController extends HttpServlet {
                 try {
                     boolean test = dba.deleteLieferung(lieferung.getWarenname(), lieferung.getAblaufdatum(), lieferung.getLieferdatum());
                     deliveryList = dba.getAllLieferungen();
+                    expireList = dba.getExpireToday();
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                     System.out.println("Lieferung existiert nicht oder hat noch Verknüpfungen");
                 }
             }
         }
-
         processRequest(request, response);
     }
 

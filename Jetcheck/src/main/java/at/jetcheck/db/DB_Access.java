@@ -36,7 +36,7 @@ public class DB_Access {
     private String insertSonderaufgabeString = "INSERT INTO public.\"Sonderaufgabe\"(\"Beschreibung\", \"Datum\", \"Mitarbeiter\", \"Sonderaufgabenname\") VALUES (?, ?, ?, ?);";
     private String getAllSonderaufgabeString = "SELECT * FROM public.\"Sonderaufgabe\";";
     private String deleteSonderaufgabeString = "DELETE FROM public.\"Sonderaufgabe\" WHERE (\"Sonderaufgabe\".\"SonderaufgabenID\" = (?)) AND (LOWER(\"Sonderaufgabe\".\"Sonderaufgabenname\") = LOWER(?)) AND (LOWER(public.\"Sonderaufgabe\".\"Mitarbeiter) = LOWER(?)) AND (public.\"Sonderaufgabe\".\"Datum\" = (?))";
-
+    
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
     private PreparedStatement deleteProductStat;
@@ -216,6 +216,8 @@ public class DB_Access {
             insertSonderaufgabeStat.setDate(2, Date.valueOf(datum));
             insertSonderaufgabeStat.setString(3, mitarbeiter);
             insertSonderaufgabeStat.setString(4, name);
+//            int id = getAllSonderaufgabe().size();
+//            insertSonderaufgabeStat.setInt(5, id);
             int result = insertSonderaufgabeStat.executeUpdate();
             if (result != 0) {
                 return true;
@@ -257,5 +259,13 @@ public class DB_Access {
         deleteSonderaufgabeStat.setInt(5, id);
         int result = deleteSonderaufgabeStat.executeUpdate();
         return result != 0;
+    }
+    
+    public List<Warenlieferung> getExpireToday() throws SQLException {
+        List<Warenlieferung> deliveryList = new ArrayList<>();
+        getAllLieferungen().stream().filter(warenlieferung -> (warenlieferung.getAblaufdatum().equals(LocalDate.now()))).forEachOrdered(warenlieferung -> {
+            deliveryList.add(warenlieferung);
+        });
+        return deliveryList;
     }
 }
