@@ -43,6 +43,9 @@ public class JetCheckController extends HttpServlet {
     private List<Warenlieferung> deliveryList = new ArrayList<>();
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private List<Warenlieferung> expireList = new ArrayList<>();
+    private List<String> fruehaufgaben = new ArrayList<>();
+    private List<String> zwischenaufgaben = new ArrayList<>();
+    private List<String> spaetaufgaben = new ArrayList<>();
     
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -55,7 +58,10 @@ public class JetCheckController extends HttpServlet {
             specialTasks = dba.getAllSonderaufgabe();
             deliveryList = dba.getAllLieferungen();
             expireList = dba.getExpireToday();
-        } catch (SQLException ex) {
+            fruehaufgaben = dba.getFruehaufgaben(getServletContext());
+            zwischenaufgaben = dba.getZwischenaufgaben(getServletContext());
+            spaetaufgaben = dba.getSpaetaufgaben(getServletContext());
+        } catch (SQLException | IOException ex) {
             Logger.getLogger(JetCheckController.class.getName()).log(Level.SEVERE, null, ex);
         }
         config.getServletContext().setAttribute("products", products);
@@ -63,6 +69,9 @@ public class JetCheckController extends HttpServlet {
         config.getServletContext().setAttribute("Sonderaufgaben", specialTasks);
         config.getServletContext().setAttribute("deliveryList", deliveryList);
         config.getServletContext().setAttribute("expireToday", expireList);
+        config.getServletContext().setAttribute("fruehaufgaben", fruehaufgaben);
+        config.getServletContext().setAttribute("zwiscehnaufgaben", zwischenaufgaben);
+        config.getServletContext().setAttribute("spaetaufgaben", spaetaufgaben);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -70,11 +79,14 @@ public class JetCheckController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         request.setCharacterEncoding("UTF-8");
 
-        request.getServletContext().setAttribute("products", products);
-        request.getServletContext().setAttribute("brokenProducts", brokenproducts);
+        request.setAttribute("products", products);
+        request.setAttribute("brokenProducts", brokenproducts);
         request.setAttribute("Sonderaufgaben", specialTasks);
         request.setAttribute("deliveryList", deliveryList);
         request.setAttribute("expireToday", expireList);
+        request.setAttribute("fruehaufgaben", fruehaufgaben);
+        request.setAttribute("zwischenaufgaben", zwischenaufgaben);
+        request.setAttribute("speataufgaben", spaetaufgaben);
 
         if (request.getParameter("warenliste") != null) {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
