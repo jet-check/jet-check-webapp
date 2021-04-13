@@ -338,6 +338,11 @@ CSS for file embeds like the "Dienstplan"
 */
 .fileView{
     margin-top: 1em;
-    height: 640px;
+    height: 400px;
     width: 895px;
+}
+
+.fileInput{
+    margin-top: 2.5%;
+    margin-left: 12%;
 }
