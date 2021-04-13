@@ -41,13 +41,13 @@
             <div class="contentPane">
                 <div class="contentHead">Dienstplan</div>
                 <div class="contentButtonPane <c:if test="${!authorized}">hidden</c:if>">
-                        <button class="contentButton" onclick="openModal('fileModal')">
-                            Dienstplan hochladen
+                        <button class="contentButton" onclick="openModal('itemModal')">
+                            Hinzufügen
                         </button>
                     </div>
                     <div class="contentEntryPane filePane">
                         <center>
-                            <iframe class="fileView" src="https://drive.google.com/file/d/1J11Cyy39rC-fV0I7gnvOpiFkU0QPQt_D/preview"></iframe>
+                            <iframe class="fileView" src="https://drive.google.com/file/d/1wutGHGMgqdRkoYjrohLak_cdXA8rJkrw/preview"></iframe>
                         </center>
 
                     </div>  
@@ -82,66 +82,6 @@
                     </c:choose>
                 </button>
             </div>
-                    
-            <div id="pwModal" class="modal">
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <div class="modalHeader">
-                        <div class="headerContent">
-                            Passwort eingeben
-                        </div>
-                        <span class="close" onclick="closePWModal()">&#10005</span>
-                    </div>
-                    <div class="modalValue">
-                        <center>
-                            <form method="POST" action="JetCheckController" name="passwordInput">
-                                <div class="inputForm">
-
-                                    <input class="inputField" type="password" name="password" placeholder="Passwort">
-                                    <br>
-                                    <label class="formError"><c:if test="${wrongPassword}">Falsches Passwort</c:if></label>                            
-
-                                    </div>
-                                    <div class="modalButtons">
-                                        <button class="confirmButton" onclick="submit()">OK</button>
-                                        <button type="button" class="cancelButton" onclick="closeModal('pwModal')">Abbrechen</button>
-                                    </div>
-                                    <input type="hidden" name="dienstplan">
-                                </form>
-                            </center>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="fileModal" class="modal">
-                    <div class="modal-content">
-                        <div class="modalHeader">
-                            <div class="headerContent">
-                                Dienstplan auswählen
-                            </div>
-                            <span class="close" onclick="closeModal('fileModal')">&#10005</span>
-                        </div>
-                        <div class="modalValue">
-                            <center>
-                                <form method="POST" action="JetCheckController" name="newProduct">
-                                    <div class="inputForm">
-                                        <label>Bitte .pdf Datei auswählen</label>
-                                        <div class="inputField">
-                                            <input class="fileInput" type="file" name="dienstplanFile" placeholder="Warenname">
-                                        </div>
-                                        
-                                </div>
-                                <div class="modalButtons">
-                                    <button class="confirmButton" onclick="submit()">OK</button>
-                                    <button type="button" class="cancelButton" onclick="closeModal('fileModal')">Abbrechen</button>
-                                </div>
-                                <input type="hidden" name="dienstplan">
-                            </form>
-                        </center>
-                    </div>
-                </div>                  
-            </div>
-            <script src="src/modal.js" type="text/javascript"></script>
         </div>
     </body>
 </html>
