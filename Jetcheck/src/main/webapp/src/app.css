@@ -108,11 +108,10 @@ Allgemeines Farbschema:
     height: 100%;
 }
 .contentPane{
-    
     margin-top: 4em;
     background-color:#F2F2F2;
     max-height: 80%; 
-    border-radius: 20px;
+    border-radius: 0 20px 0px 20px;
     
 }
 .contentHead{
@@ -120,7 +119,7 @@ Allgemeines Farbschema:
     background-color: #fdc400;
     color: white;
     Font-size: 24px;
-    border-radius: 20px 20px 0 0;
+    border-radius: 0px 20px 0 0;
 }
 .contentButtonPane{
     padding: 0.1em 0.6em 0em 0.6em;
@@ -140,6 +139,9 @@ Allgemeines Farbschema:
 }
 .contentEntryPane{
     padding: 0.1em 0.6em 0.6em 0.6em;
+    overflow-y: auto;
+    overflow-x: hidden;
+    height: 33em;
 }
 .contentEntry{
     margin: 0.5em 0 0 0em;
@@ -329,4 +331,18 @@ Allgemeines Farbschema:
     box-shadow: 0px 3px 10px #00000029;
     font-size: 16px;
     font-weight: bold;
+}
+
+/*
+CSS for file embeds like the "Dienstplan"
+*/
+.fileView{
+    margin-top: 1em;
+    height: 400px;
+    width: 895px;
+}
+
+.fileInput{
+    margin-top: 2.5%;
+    margin-left: 12%;
 }

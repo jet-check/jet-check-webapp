@@ -105,7 +105,10 @@ public class JetCheckController extends HttpServlet {
             request.getRequestDispatcher("GebäckSubmenu.jsp").forward(request, response);
         } else if (request.getParameter("lieferungenliste") != null) {
             request.getRequestDispatcher("LieferungenListe.jsp").forward(request, response);
-        } else {
+        } else if (request.getParameter("dienstplan") != null){
+            request.getRequestDispatcher("DienstPlanView.jsp").forward(request, response);
+        }
+        else {
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
         }
         
