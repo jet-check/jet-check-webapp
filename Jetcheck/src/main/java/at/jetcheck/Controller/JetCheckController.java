@@ -71,7 +71,7 @@ public class JetCheckController extends HttpServlet {
         request.getServletContext().setAttribute("brokenProducts", brokenproducts);
         request.setAttribute("Sonderaufgaben", specialTasks);
         request.setAttribute("deliveryList", deliveryList);
-        // name im frontend immer gleich dann einfach den string mit .jsp erweitern und darauf forwarden
+
         if (request.getParameter("warenliste") != null) {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
         } else if (request.getParameter("bruchwarenliste") != null) {
@@ -89,8 +89,6 @@ public class JetCheckController extends HttpServlet {
             request.getRequestDispatcher("GebäckSubmenu.jsp").forward(request, response);
         } else if (request.getParameter("lieferungenliste") != null) {
             request.getRequestDispatcher("LieferungenListe.jsp").forward(request, response);
-        } else if (request.getParameter("dienstplan") != null){
-            request.getRequestDispatcher("DienstPlanView.jsp").forward(request, response);
         } else {
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
         }

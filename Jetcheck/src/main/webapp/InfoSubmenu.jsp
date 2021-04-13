@@ -93,7 +93,7 @@
                     <td class="menuItem">
                 <center>
                     <form method="POST" action="JetCheckController">
-                        <input type="submit" class="menuButton" value="Dienstplan" name="dienstplan">
+                        <input type="submit" class="menuButton" value="Dienstplan" name="dienstPlanBtn">
                     </form>
 
                 </center>
@@ -101,7 +101,7 @@
                 <td class="menuItem">
                 <center>
                     <form method="POST" action="JetCheckController">
-                        <input type="submit" class="menuButton" value="Schichtaufgaben" name="schichtaufgabe">
+                        <input type="submit" class="menuButton" value="Schichtaufträge" name="schichtBtn">
                     </form>
                 </center>
 
