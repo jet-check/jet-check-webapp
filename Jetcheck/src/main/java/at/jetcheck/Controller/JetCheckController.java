@@ -68,7 +68,7 @@ public class JetCheckController extends HttpServlet {
         config.getServletContext().setAttribute("deliveryList", deliveryList);
         config.getServletContext().setAttribute("expireToday", expireList);
         config.getServletContext().setAttribute("fruehaufgaben", fruehaufgaben);
-        config.getServletContext().setAttribute("zwiscehnaufgaben", zwischenaufgaben);
+        config.getServletContext().setAttribute("zwischenaufgaben", zwischenaufgaben);
         config.getServletContext().setAttribute("spaetaufgaben", spaetaufgaben);
     }
 
@@ -105,6 +105,14 @@ public class JetCheckController extends HttpServlet {
             request.getRequestDispatcher("LieferungenListe.jsp").forward(request, response);
         } else if (request.getParameter("dienstplan") != null){
             request.getRequestDispatcher("DienstPlanView.jsp").forward(request, response);
+        } else if (request.getParameter("schichtaufgaben") != null){
+            request.getRequestDispatcher("SchichtaufgabenSubmenu.jsp").forward(request, response);
+        } else if (request.getParameter("frueh") != null){
+            request.getRequestDispatcher("Dienstanzeige.jsp").forward(request, response);
+        } else if (request.getParameter("zwischen") != null){
+            request.getRequestDispatcher("Dienstanzeige.jsp").forward(request, response);
+        } else if (request.getParameter("spaet") != null){
+            request.getRequestDispatcher("Dienstanzeige.jsp").forward(request, response);
         }
         else {
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
@@ -299,6 +307,18 @@ public class JetCheckController extends HttpServlet {
                 }
             }
         }
+        
+        if (request.getParameter("frueh") != null){
+            request.setAttribute("schicht", "Frühdienst");
+            request.setAttribute("todoList", fruehaufgaben);
+        } else if (request.getParameter("zwischen") != null){
+            request.setAttribute("schicht", "Zwischendienst");
+            request.setAttribute("todoList", zwischenaufgaben);
+        } else if (request.getParameter("spaet") != null){
+            request.setAttribute("schicht", "Spätdienst");
+            request.setAttribute("todoList", spaetaufgaben);
+        }
+        
         processRequest(request, response);
     }
 

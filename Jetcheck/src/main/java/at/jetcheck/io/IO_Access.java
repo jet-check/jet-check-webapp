@@ -8,10 +8,12 @@ package at.jetcheck.io;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,17 +23,17 @@ import java.util.stream.Collectors;
  */
 public class IO_Access {
     public List<String> getFruehaufgaben(String path) throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(new File(path)));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
         List<String> aufgaben = br.lines().collect(Collectors.toList());
         return aufgaben;
     }
     public List<String> getZwischenaufgaben(String path) throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(new File(path)));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
         List<String> aufgaben = br.lines().collect(Collectors.toList());
         return aufgaben;
     }
     public List<String> getSpaetaufgaben(String path) throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(new File(path)));
+        BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
         List<String> aufgaben = br.lines().collect(Collectors.toList());
         return aufgaben;
     }

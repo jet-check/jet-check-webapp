@@ -1,4 +1,3 @@
-
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -93,7 +92,7 @@
                     <td class="menuItem">
                 <center>
                     <form method="POST" action="JetCheckController">
-                        <input type="submit" class="menuButton" value="Dienstplan" name="dienstplan">
+                        <input type="submit" class="menuButton" value="Frühdienst" name="frueh">
                     </form>
 
                 </center>
@@ -101,7 +100,7 @@
                 <td class="menuItem">
                 <center>
                     <form method="POST" action="JetCheckController">
-                        <input type="submit" class="menuButton" value="Schichtaufträge" name="schichtaufgaben">
+                        <input type="submit" class="menuButton" value="Zwischendienst" name="zwischen">
                     </form>
                 </center>
 
@@ -109,7 +108,7 @@
                 <td class="menuItem">
                 <center>
                     <form method="POST" action="JetCheckController">
-                        <input type="submit" class="menuButton" value="Sonderaufgaben" name="sonderaufgaben">
+                        <input type="submit" class="menuButton" value="Spätdienst" name="spaet">
                     </form>
                 </center>
                 </td>
