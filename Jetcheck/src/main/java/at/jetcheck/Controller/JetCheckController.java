@@ -48,7 +48,7 @@ public class JetCheckController extends HttpServlet {
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-
+        ioa = new IO_Access();
         dba = DB_Access.getInstance();
         try {
             products = dba.getAllProducts();
