@@ -10,10 +10,8 @@ import at.jetcheck.beans.Sonderaufgabe;
 import at.jetcheck.beans.Warenlieferung;
 import at.jetcheck.db.DB_Access;
 import at.jetcheck.bl.PasswordValidation;
+import at.jetcheck.io.IO_Access;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -27,7 +25,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Request;
 
 /**
  *
@@ -37,6 +34,7 @@ import javax.ws.rs.core.Request;
 public class JetCheckController extends HttpServlet {
 
     private DB_Access dba;
+    private IO_Access ioa;
     private List<String> products = new ArrayList<>();
     private List<Bruchware> brokenproducts = new ArrayList<>(); 
     private List<Sonderaufgabe> specialTasks = new ArrayList<>();
@@ -58,9 +56,9 @@ public class JetCheckController extends HttpServlet {
             specialTasks = dba.getAllSonderaufgabe();
             deliveryList = dba.getAllLieferungen();
             expireList = dba.getExpireToday();
-            fruehaufgaben = dba.getFruehaufgaben(getServletContext());
-            zwischenaufgaben = dba.getZwischenaufgaben(getServletContext());
-            spaetaufgaben = dba.getSpaetaufgaben(getServletContext());
+            fruehaufgaben = ioa.getFruehaufgaben(getServletContext().getRealPath("src/fruehaufgaben.txt"));
+            zwischenaufgaben = ioa.getZwischenaufgaben(getServletContext().getRealPath("src/zwischenaufgaben.txt"));
+            spaetaufgaben = ioa.getSpaetaufgaben(getServletContext().getRealPath("src/spaetaufgaben.txt"));
         } catch (SQLException | IOException ex) {
             Logger.getLogger(JetCheckController.class.getName()).log(Level.SEVERE, null, ex);
         }

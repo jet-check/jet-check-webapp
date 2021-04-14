@@ -8,12 +8,6 @@ package at.jetcheck.db;
 import at.jetcheck.beans.Bruchware;
 import at.jetcheck.beans.Sonderaufgabe;
 import at.jetcheck.beans.Warenlieferung;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,8 +15,6 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import javax.servlet.ServletContext;
 
 /**
  *
@@ -87,10 +79,7 @@ public class DB_Access {
         }
         insertProductStat.setString(1, productName);
         int result = insertProductStat.executeUpdate();
-        if (result != 0) {
-            return true;
-        }
-        return false;
+        return result != 0;
     }
 
     public List<String> getAllProducts() throws SQLException {
@@ -274,21 +263,5 @@ public class DB_Access {
             deliveryList.add(warenlieferung);
         });
         return deliveryList;
-    }
-    
-    public List<String> getFruehaufgaben(ServletContext context) throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(new File(context.getRealPath("src/fruehaufgaben.txt"))));
-        List<String> aufgaben = br.lines().collect(Collectors.toList());
-        return aufgaben;
-    }
-    public List<String> getZwischenaufgaben(ServletContext context) throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(new File(context.getRealPath("src/zwischenaufgaben.txt"))));
-        List<String> aufgaben = br.lines().collect(Collectors.toList());
-        return aufgaben;
-    }
-    public List<String> getSpaetaufgaben(ServletContext context) throws FileNotFoundException, IOException {
-        BufferedReader br = new BufferedReader(new FileReader(new File(context.getRealPath("src/spaetaufgaben.txt"))));
-        List<String> aufgaben = br.lines().collect(Collectors.toList());
-        return aufgaben;
     }
 }
