@@ -38,7 +38,7 @@ public class JetCheckController extends HttpServlet {
 
     private DB_Access dba;
     private List<String> products = new ArrayList<>();
-    private List<Bruchware> brokenproducts = new ArrayList<>(); // pls DB access for this one
+    private List<Bruchware> brokenproducts = new ArrayList<>(); 
     private List<Sonderaufgabe> specialTasks = new ArrayList<>();
     private List<Warenlieferung> deliveryList = new ArrayList<>();
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");

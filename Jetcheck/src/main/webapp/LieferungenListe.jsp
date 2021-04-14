@@ -51,6 +51,7 @@
                     <div class="contentEntryPane">
                         <form method="POST" action="JetCheckController">
                         <c:forEach var="delivery" items="${deliveryList}">
+                            
                             <div class="contentEntry">
                                 <div class="entryContent">
                                     <table>
@@ -59,13 +60,34 @@
                                                 <input type="checkbox" name="cb_${delivery}">
                                             </td>
                                             <td class="valueCell">
-                                                ${delivery.getWarenname()}
+                                                <c:choose>
+                                                    <c:when test="${expireToday.contains(delivery)}">
+                                                        <font color="#ff0000">${delivery.getWarenname()}</font>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        ${delivery.getWarenname()}
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                             <td class="DeliveryDateCell">
-                                                ${delivery.getLieferdatum()}
+                                                <c:choose>
+                                                    <c:when test="${expireToday.contains(delivery)}">
+                                                        <font color="#ff0000">${delivery.getLieferdatum()}</font>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        ${delivery.getLieferdatum()}
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                             <td class="ExpiryDateCell">
-                                                ${delivery.getAblaufdatum()}
+                                                <c:choose>
+                                                    <c:when test="${expireToday.contains(delivery)}">
+                                                        <font color="#ff0000">${delivery.getAblaufdatum()}</font>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        ${delivery.getAblaufdatum()}
+                                                    </c:otherwise>
+                                                </c:choose>
                                             </td>
                                         </tr>
                                     </table>

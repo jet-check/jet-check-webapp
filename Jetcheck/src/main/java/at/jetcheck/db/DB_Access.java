@@ -39,7 +39,7 @@ public class DB_Access {
     private String getAllBruchwareString = "SELECT * FROM public.\"Bruchware\";";
     private String deleteBruchwareString = "DELETE FROM public.\"Bruchware\" WHERE LOWER(public.\"Bruchware\".\"Warenname\") = LOWER(?) AND (public.\"Bruchware\".\"Datum\" = (?)) AND (public.\"Bruchware\".\"Anzahl\" = (?));";
     private String insertLieferungString = "INSERT INTO public.\"Warenlieferung\" VALUES (?, ?, ?);";
-    private String getAllLieferungString = "SELECT * FROM public.\"Warenlieferung\";";
+    private String getAllLieferungString = "SELECT * FROM public.\"Warenlieferung\" ORDER BY public.\"Warenlieferung\".\"Ablaufsdatum\" ASC;";
     private String deleteLieferungString = "DELETE FROM public.\"Warenlieferung\" WHERE (public.\"Warenlieferung\".\"Ablaufsdatum\" = (?)) AND (public.\"Warenlieferung\".\"Lieferdatum\" = (?)) AND LOWER(public.\"Warenlieferung\".\"Warenname\") = LOWER(?);";
     private String insertSonderaufgabeString = "INSERT INTO public.\"Sonderaufgabe\"(\"Beschreibung\", \"Datum\", \"Mitarbeiter\", \"Sonderaufgabenname\", \"SonderaufgabenID\") VALUES (?, ?, ?, ?, ?);";
     private String getAllSonderaufgabeString = "SELECT * FROM public.\"Sonderaufgabe\";";
