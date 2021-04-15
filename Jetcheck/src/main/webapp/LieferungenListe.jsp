@@ -50,8 +50,23 @@
                     </div>
                     <div class="contentEntryPane">
                         <form method="POST" action="JetCheckController">
+                            <div class="contentEntry">
+                                <div class="entryContent">
+                                    <table>
+                                        <tr>
+                                            <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
+                                            </td>
+                                            <td class="nameCell">
+                                                Warenname
+                                            </td>
+                                            <td class="col2Cell">
+                                                Ablaufdatum
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
                         <c:forEach var="delivery" items="${deliveryList}">
-                            
                             <div class="contentEntry">
                                 <div class="entryContent">
                                     <table>
@@ -59,7 +74,7 @@
                                             <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
                                                 <input type="checkbox" name="cb_${delivery}">
                                             </td>
-                                            <td class="valueCell">
+                                            <td class="nameCell">
                                                 <c:choose>
                                                     <c:when test="${expireToday.contains(delivery)}">
                                                         <font color="#ff0000">${delivery.getWarenname()}</font>
@@ -69,17 +84,7 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <td class="DeliveryDateCell">
-                                                <c:choose>
-                                                    <c:when test="${expireToday.contains(delivery)}">
-                                                        <font color="#ff0000">${delivery.getLieferdatum()}</font>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                        ${delivery.getLieferdatum()}
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </td>
-                                            <td class="ExpiryDateCell">
+                                            <td class="col2Cell">
                                                 <c:choose>
                                                     <c:when test="${expireToday.contains(delivery)}">
                                                         <font color="#ff0000">${delivery.getAblaufdatum()}</font>
@@ -94,7 +99,6 @@
                                 </div>
                             </div>
                         </c:forEach>
-
                         <div id="deleteLieferungenModal" class="modal">
                             <div class="modal-content">
                                 <div class="modalHeader">
@@ -206,7 +210,7 @@
                                             </c:forEach>
                                         </Select>
                                         <br>
-                                        <input class="inputField" type="date" name="DeliveryDate" data-date-format="DD MM YYYY" placeholder="Lieferdatum">
+                                        <a>Ablaufdatum:</a>
                                         <br>
                                         <input class="inputField" type="date" name="ExpiryDate" data-date-format="DD MM YYYY" placeholder="Ablaufdatum">
                                         <br>

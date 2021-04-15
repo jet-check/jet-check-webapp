@@ -14,9 +14,11 @@ import at.jetcheck.bl.PasswordValidation;
 import at.jetcheck.io.IO_Access;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
@@ -272,7 +274,9 @@ public class JetCheckController extends HttpServlet {
         if (request.getParameter("deliveryproductname") != null) {
 
             String ware = request.getParameter("deliveryproductname");
-            String deliverydateStr = request.getParameter("DeliveryDate");
+            SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
+            Date date = new Date(System.currentTimeMillis());
+            String deliverydateStr = formatter.format(date);
             String expirydateStr = request.getParameter("ExpiryDate");
             LocalDate deliverydate = LocalDate.parse(deliverydateStr, dtf);
             LocalDate expirydate = LocalDate.parse(expirydateStr, dtf);
