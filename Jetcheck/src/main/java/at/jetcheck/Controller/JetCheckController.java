@@ -8,6 +8,7 @@ package at.jetcheck.Controller;
 import at.jetcheck.beans.Bruchware;
 import at.jetcheck.beans.Sonderaufgabe;
 import at.jetcheck.beans.Warenlieferung;
+import at.jetcheck.bl.PDF_Converter;
 import at.jetcheck.db.DB_Access;
 import at.jetcheck.bl.PasswordValidation;
 import at.jetcheck.io.IO_Access;
@@ -16,6 +17,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,7 +38,7 @@ public class JetCheckController extends HttpServlet {
     private DB_Access dba;
     private IO_Access ioa;
     private List<String> products = new ArrayList<>();
-    private List<Bruchware> brokenproducts = new ArrayList<>(); 
+    private List<Bruchware> brokenproducts = new ArrayList<>();
     private List<Sonderaufgabe> specialTasks = new ArrayList<>();
     private List<Warenlieferung> deliveryList = new ArrayList<>();
     private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -44,7 +46,7 @@ public class JetCheckController extends HttpServlet {
     private List<String> fruehaufgaben = new ArrayList<>();
     private List<String> zwischenaufgaben = new ArrayList<>();
     private List<String> spaetaufgaben = new ArrayList<>();
-    
+
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
@@ -103,21 +105,20 @@ public class JetCheckController extends HttpServlet {
             request.getRequestDispatcher("GebäckSubmenu.jsp").forward(request, response);
         } else if (request.getParameter("lieferungenliste") != null) {
             request.getRequestDispatcher("LieferungenListe.jsp").forward(request, response);
-        } else if (request.getParameter("dienstplan") != null){
+        } else if (request.getParameter("dienstplan") != null) {
             request.getRequestDispatcher("DienstPlanView.jsp").forward(request, response);
-        } else if (request.getParameter("schichtaufgaben") != null){
+        } else if (request.getParameter("schichtaufgaben") != null) {
             request.getRequestDispatcher("SchichtaufgabenSubmenu.jsp").forward(request, response);
-        } else if (request.getParameter("frueh") != null){
+        } else if (request.getParameter("frueh") != null) {
             request.getRequestDispatcher("Dienstanzeige.jsp").forward(request, response);
-        } else if (request.getParameter("zwischen") != null){
+        } else if (request.getParameter("zwischen") != null) {
             request.getRequestDispatcher("Dienstanzeige.jsp").forward(request, response);
-        } else if (request.getParameter("spaet") != null){
+        } else if (request.getParameter("spaet") != null) {
             request.getRequestDispatcher("Dienstanzeige.jsp").forward(request, response);
-        }
-        else {
+        } else {
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
         }
-        
+
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -176,7 +177,7 @@ public class JetCheckController extends HttpServlet {
             try {
                 dba.insertBruchware(productname, date, quantity);
                 brokenproducts = dba.getAllBruchware();
-                
+
                 for (Bruchware brokenproduct : brokenproducts) {
                     System.out.println(brokenproduct);
                 }
@@ -184,10 +185,9 @@ public class JetCheckController extends HttpServlet {
                 ex.printStackTrace();
             }
         }
-        
+
 //          Delete Bruchwaren
-        
-          if(request.getParameter("deleteBWaren") != null) {
+        if (request.getParameter("deleteBWaren") != null) {
             List<Bruchware> brokenProductsToBeDeleted = new ArrayList<>();
             for (Bruchware brokenProduct : brokenproducts) {
                 String cb = request.getParameter(String.format("cb_%s", brokenProduct));
@@ -196,7 +196,7 @@ public class JetCheckController extends HttpServlet {
                     brokenProductsToBeDeleted.add(brokenProduct);
                 }
             }
-            
+
             for (Bruchware brokenProduct : brokenProductsToBeDeleted) {
                 try {
                     boolean test = dba.deleteBruchware(brokenProduct.getWarenname(), brokenProduct.getDatum(), brokenProduct.getAnzahl());
@@ -247,7 +247,7 @@ public class JetCheckController extends HttpServlet {
                 }
             }
         }
-        
+
         // Inserts special task
         if (request.getParameter("specialTask") != null) {
 
@@ -286,9 +286,9 @@ public class JetCheckController extends HttpServlet {
                 System.out.println("Fehler beim Einfuegen der Lieferung!");
             }
         }
-        
+
         // Deletes Delivery
-        if(request.getParameter("deleteLieferung") != null) {
+        if (request.getParameter("deleteLieferung") != null) {
             List<Warenlieferung> deliveriesToDelete = new ArrayList<>();
             for (Warenlieferung delivery : deliveryList) {
                 String cb = request.getParameter(String.format("cb_%s", delivery));
@@ -307,18 +307,40 @@ public class JetCheckController extends HttpServlet {
                 }
             }
         }
-        
-        if (request.getParameter("frueh") != null){
+
+        if (request.getParameter("frueh") != null) {
             request.setAttribute("schicht", "Frühdienst");
             request.setAttribute("todoList", fruehaufgaben);
-        } else if (request.getParameter("zwischen") != null){
+        } else if (request.getParameter("zwischen") != null) {
             request.setAttribute("schicht", "Zwischendienst");
             request.setAttribute("todoList", zwischenaufgaben);
-        } else if (request.getParameter("spaet") != null){
+        } else if (request.getParameter("spaet") != null) {
             request.setAttribute("schicht", "Spätdienst");
             request.setAttribute("todoList", spaetaufgaben);
         }
-        
+
+        if (request.getParameter("exportBrokenProducts") != null) {
+            PDF_Converter exportBrokenProductsToPdf = new PDF_Converter();
+            try {
+                LocalDate von_datum = LocalDate.parse(request.getParameter("vonDate"), dtf);
+                LocalDate bis_datum = LocalDate.parse(request.getParameter("bisDate"), dtf);
+                List<Bruchware> bruchwaren_to_be_exported = new LinkedList<>();
+                List<Bruchware> all_bruchwaren = dba.getAllBruchware();
+                System.out.println(request.getParameter("vonDate"));
+                for (int i = 0; i < all_bruchwaren.size(); i++) {
+                    LocalDate gotDate = all_bruchwaren.get(i).getDatum();
+                    if(gotDate.isAfter(von_datum) && gotDate.isBefore(bis_datum)) {
+                        bruchwaren_to_be_exported.add(all_bruchwaren.get(i));
+                    }
+                }
+                
+                exportBrokenProductsToPdf.exportBruchwarenPdf(bruchwaren_to_be_exported, von_datum.toString(), bis_datum.toString());
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+                System.out.println("Fehler beim Exportieren der Bruchwaren.");
+            }
+        }
+
         processRequest(request, response);
     }
 

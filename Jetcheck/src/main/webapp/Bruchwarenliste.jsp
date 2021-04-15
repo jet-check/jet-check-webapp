@@ -209,7 +209,7 @@
                                     <input class="inputField" type="date" name="bisDate" data-date-format="DD MM YYYY" placeholder="Datum">
                                 </div>
                                 <div class="modalButtons">
-                                    <button class="confirmButton" onclick="submit()">OK</button>
+                                    <button class="confirmButton" name="exportBrokenProducts" onclick="submit()">OK</button>
                                     <button type="button" class="cancelButton" onclick="closeModal('exportModal')">Abbrechen</button>
                                 </div>
                                 <input type="hidden" name="bruchwarenliste">
