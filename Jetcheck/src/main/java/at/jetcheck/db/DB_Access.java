@@ -31,12 +31,12 @@ public class DB_Access {
     private String getAllBruchwareString = "SELECT * FROM public.\"Bruchware\";";
     private String deleteBruchwareString = "DELETE FROM public.\"Bruchware\" WHERE LOWER(public.\"Bruchware\".\"Warenname\") = LOWER(?) AND (public.\"Bruchware\".\"Datum\" = (?)) AND (public.\"Bruchware\".\"Anzahl\" = (?));";
     private String insertLieferungString = "INSERT INTO public.\"Warenlieferung\" VALUES (?, ?, ?);";
-    private String getAllLieferungString = "SELECT * FROM public.\"Warenlieferung\";";
+    private String getAllLieferungString = "SELECT * FROM public.\"Warenlieferung\" ORDER BY public.\"Warenlieferung\".\"Ablaufsdatum\" ASC;";
     private String deleteLieferungString = "DELETE FROM public.\"Warenlieferung\" WHERE (public.\"Warenlieferung\".\"Ablaufsdatum\" = (?)) AND (public.\"Warenlieferung\".\"Lieferdatum\" = (?)) AND LOWER(public.\"Warenlieferung\".\"Warenname\") = LOWER(?);";
-    private String insertSonderaufgabeString = "INSERT INTO public.\"Sonderaufgabe\"(\"Beschreibung\", \"Datum\", \"Mitarbeiter\", \"Sonderaufgabenname\") VALUES (?, ?, ?, ?);";
+    private String insertSonderaufgabeString = "INSERT INTO public.\"Sonderaufgabe\"(\"Beschreibung\", \"Datum\", \"Mitarbeiter\", \"Sonderaufgabenname\", \"SonderaufgabenID\") VALUES (?, ?, ?, ?, ?);";
     private String getAllSonderaufgabeString = "SELECT * FROM public.\"Sonderaufgabe\";";
     private String deleteSonderaufgabeString = "DELETE FROM public.\"Sonderaufgabe\" WHERE (\"Sonderaufgabe\".\"SonderaufgabenID\" = (?)) AND (LOWER(\"Sonderaufgabe\".\"Sonderaufgabenname\") = LOWER(?)) AND (LOWER(public.\"Sonderaufgabe\".\"Mitarbeiter) = LOWER(?)) AND (public.\"Sonderaufgabe\".\"Datum\" = (?))";
-
+    
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
     private PreparedStatement deleteProductStat;
@@ -79,10 +79,7 @@ public class DB_Access {
         }
         insertProductStat.setString(1, productName);
         int result = insertProductStat.executeUpdate();
-        if (result != 0) {
-            return true;
-        }
-        return false;
+        return result != 0;
     }
 
     public List<String> getAllProducts() throws SQLException {
@@ -206,16 +203,17 @@ public class DB_Access {
         return result != 0;
     }
 
-    public boolean insertSonderaufgabe(String beschreibung, LocalDate datum, String mitarbeiter, String name) throws SQLException {
+    public boolean insertSonderaufgabe(String beschreibung, LocalDate datum, String mitarbeiter, String name, int id) throws SQLException {
         if (insertSonderaufgabeStat == null) {
             insertSonderaufgabeStat = db.getConnection().prepareStatement(insertSonderaufgabeString);
         }
-        Sonderaufgabe sonderaufgabe = new Sonderaufgabe(beschreibung, datum, mitarbeiter, name, 0);
+        Sonderaufgabe sonderaufgabe = new Sonderaufgabe(beschreibung, datum, mitarbeiter, name, id);
         if (!getAllSonderaufgabe().contains(sonderaufgabe)) {
             insertSonderaufgabeStat.setString(1, beschreibung);
             insertSonderaufgabeStat.setDate(2, Date.valueOf(datum));
             insertSonderaufgabeStat.setString(3, mitarbeiter);
             insertSonderaufgabeStat.setString(4, name);
+            insertSonderaufgabeStat.setInt(5, id);
             int result = insertSonderaufgabeStat.executeUpdate();
             if (result != 0) {
                 return true;
@@ -237,7 +235,7 @@ public class DB_Access {
             LocalDate datum = LocalDate.parse(sonderaufgaben.getDate("Datum").toString());
             String mitarbeiter = sonderaufgaben.getString("Mitarbeiter");
             String name = sonderaufgaben.getString("Sonderaufgabenname");
-            int id = sonderaufgaben.getInt("id");
+            int id = sonderaufgaben.getInt("SonderaufgabenID");
             sonderaufgabeList.add(new Sonderaufgabe(beschreibung, datum, mitarbeiter, name, id));
         }
         return sonderaufgabeList;
@@ -257,5 +255,13 @@ public class DB_Access {
         deleteSonderaufgabeStat.setInt(5, id);
         int result = deleteSonderaufgabeStat.executeUpdate();
         return result != 0;
+    }
+    
+    public List<Warenlieferung> getExpireToday() throws SQLException {
+        List<Warenlieferung> deliveryList = new ArrayList<>();
+        getAllLieferungen().stream().filter(warenlieferung -> (warenlieferung.getAblaufdatum().equals(LocalDate.now()))).forEachOrdered(warenlieferung -> {
+            deliveryList.add(warenlieferung);
+        });
+        return deliveryList;
     }
 }
