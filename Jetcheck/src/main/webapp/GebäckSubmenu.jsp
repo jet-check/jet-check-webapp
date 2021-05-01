@@ -106,7 +106,7 @@
                     <td class="menuItem">
                 <center>
                     <form method="POST" action="?">
-                        <input type="submit" class="menuButton" value="Entnahmen Mitarbeiter" name="entnahmeBtn">
+                        <input type="submit" class="menuButton" value="Entnahmen Mitarbeiter" name="GebaeckEntnahmen">
                     </form>
 
                 </center>

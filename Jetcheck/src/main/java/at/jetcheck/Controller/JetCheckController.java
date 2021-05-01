@@ -90,6 +90,7 @@ public class JetCheckController extends HttpServlet {
         request.setAttribute("zwischenaufgaben", zwischenaufgaben);
         request.setAttribute("speataufgaben", spaetaufgaben);
 
+        
         if (request.getParameter("warenliste") != null) {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
         } else if (request.getParameter("bruchwarenliste") != null) {
@@ -117,7 +118,10 @@ public class JetCheckController extends HttpServlet {
             request.getRequestDispatcher("Dienstanzeige.jsp").forward(request, response);
         } else if (request.getParameter("spaet") != null) {
             request.getRequestDispatcher("Dienstanzeige.jsp").forward(request, response);
-        } else {
+        } else if (request.getParameter("GebaeckEntnahmen") != null){
+            request.getRequestDispatcher("GebaeckEntnahmenView.jsp").forward(request, response);
+        } 
+        else {
             request.getRequestDispatcher("WareSubmenu.jsp").forward(request, response);
         }
 
