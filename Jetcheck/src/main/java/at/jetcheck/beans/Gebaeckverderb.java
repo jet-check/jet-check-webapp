@@ -6,6 +6,7 @@
 package at.jetcheck.beans;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 /**
  *
@@ -15,6 +16,7 @@ public class Gebaeckverderb {
     private String name;
     private LocalDate date;
     private int amount;
+    private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     public Gebaeckverderb(String name, LocalDate date, int amount) {
         this.name = name;
@@ -24,8 +26,8 @@ public class Gebaeckverderb {
 
     public Gebaeckverderb() {
     }
-    
-    public String getName() {
+
+    public String getGebaeckname() {
         return name;
     }
 
@@ -33,7 +35,7 @@ public class Gebaeckverderb {
         this.name = name;
     }
 
-    public LocalDate getDate() {
+    public LocalDate getDateFormatted() {
         return date;
     }
 
@@ -41,11 +43,16 @@ public class Gebaeckverderb {
         this.date = date;
     }
 
-    public int getAmount() {
+    public int getAnzahl() {
         return amount;
     }
 
     public void setAmount(int amount) {
         this.amount = amount;
+    }
+    
+    @Override
+    public String toString() {
+        return name + ", " + date.format(DTF) + ", " + amount;
     }
 }

@@ -40,6 +40,9 @@ public class DB_Access {
     private String insertExpiredBreadString = "INSERT INTO public.\"GebaeckVerderb\" VALUES (?, ?, ?);";
     private String getExpiredBreadString = "SELECT * FROM public.\"GebaeckVerderb\"";
     private String deleteExpiredBreadString = "DELETE FROM public.\"GebaeckVerderb\" WHERE (LOWER(public.\"GebaeckVerderb\".\"Gebaeckname\") = LOWER(?)) AND (public.\"GebaeckVerderb\".\"Datum\" = (?)) AND (public.\"GebaeckVerderb\".\"Anzahl\" = (?);";
+    private String insertGebaeckString = "INSERT INTO public.\"Gebaeck\" VALUES(?);";
+    private String getAllGebaeckString = "SELECT * FROM public.\"Gebaeck\";";
+    private String deleteGebaeckString = "DELETE FROM public.\"Gebaeck\" WHERE LOWER(public.\"Ware\".\"Warenname\") = LOWER(?);";
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
     private PreparedStatement deleteProductStat;
@@ -55,7 +58,10 @@ public class DB_Access {
     private PreparedStatement insertExpiredBreadStat;
     private PreparedStatement getExpiredBreadStat;
     private PreparedStatement deleteExpiredBreadStat;
-    
+    private PreparedStatement insertGebaeckStat;
+    private PreparedStatement getAllGebaeckStat;
+    private PreparedStatement deleteGebaeckStat;
+
     public static DB_Access getInstance() {
         if (dbInstance == null) {
             dbInstance = new DB_Access();
@@ -121,7 +127,7 @@ public class DB_Access {
             insertBruchwareStat.setString(1, productName);
             insertBruchwareStat.setDate(2, Date.valueOf(datum));
             insertBruchwareStat.setInt(3, anzahl);
-            
+
             int result = insertBruchwareStat.executeUpdate();
             if (result != 0) {
                 return true;
@@ -262,7 +268,7 @@ public class DB_Access {
         int result = deleteSonderaufgabeStat.executeUpdate();
         return result != 0;
     }
-    
+
     public List<Warenlieferung> getExpireToday() throws SQLException {
         List<Warenlieferung> deliveryList = new ArrayList<>();
         getAllLieferungen().stream().filter(warenlieferung -> (warenlieferung.getAblaufdatum().equals(LocalDate.now()))).forEachOrdered(warenlieferung -> {
@@ -270,21 +276,22 @@ public class DB_Access {
         });
         return deliveryList;
     }
-    
+
     public boolean insertExpiredBread(String name, LocalDate date, int amount) throws SQLException {
         if (insertExpiredBreadStat == null) {
             insertExpiredBreadStat = db.getConnection().prepareStatement(insertExpiredBreadString);
         }
-        if (name.trim().equals("")) {
-            return false;
+        Gebaeckverderb verderb = new Gebaeckverderb(name, date, amount);
+        if (!getExpiredBread().contains(verderb) && getAllGebaeck().contains(verderb.getGebaeckname())) {
+            insertExpiredBreadStat.setString(1, name);
+            insertExpiredBreadStat.setDate(2, Date.valueOf(date));
+            insertExpiredBreadStat.setInt(3, amount);
+            int result = insertExpiredBreadStat.executeUpdate();
+            return result != 0;
         }
-        insertExpiredBreadStat.setString(1, name);
-        insertExpiredBreadStat.setDate(2, Date.valueOf(date));
-        insertExpiredBreadStat.setInt(3, amount);
-        int result = insertExpiredBreadStat.executeUpdate();
-        return result != 0;
+        return false;
     }
-    
+
     public List<Gebaeckverderb> getExpiredBread() throws SQLException {
         if (getExpiredBreadStat == null) {
             getExpiredBreadStat = db.getConnection().prepareStatement(getExpiredBreadString);
@@ -296,7 +303,7 @@ public class DB_Access {
         }
         return expiredBreadList;
     }
-    
+
     public boolean deleteExpiredBread(String name, LocalDate date, int amount) throws SQLException {
         if (deleteExpiredBreadStat == null) {
             deleteExpiredBreadStat = db.getConnection().prepareStatement(deleteExpiredBreadString);
@@ -308,6 +315,42 @@ public class DB_Access {
         deleteExpiredBreadStat.setDate(2, Date.valueOf(date));
         deleteExpiredBreadStat.setInt(3, amount);
         int result = deleteExpiredBreadStat.executeUpdate();
+        return result != 0;
+    }
+
+    public boolean insertNewGebaeck(String productName) throws SQLException {
+        if (insertGebaeckStat == null) {
+            insertGebaeckStat = db.getConnection().prepareStatement(insertGebaeckString);
+        }
+        if (productName.trim().equals("")) {
+            return false;
+        }
+        insertGebaeckStat.setString(1, productName);
+        int result = insertGebaeckStat.executeUpdate();
+        return result != 0;
+    }
+
+    public List<String> getAllGebaeck() throws SQLException {
+        if (getAllGebaeckStat == null) {
+            getAllGebaeckStat = db.getConnection().prepareStatement(getAllGebaeckString);
+        }
+        List<String> productList = new ArrayList<>();
+        ResultSet products = getAllGebaeckStat.executeQuery();
+        while (products.next()) {
+            productList.add(products.getString("Gebaeckname"));
+        }
+        return productList;
+    }
+
+    public boolean deleteGebaeck(String productName) throws SQLException {
+        if (deleteGebaeckStat == null) {
+            deleteGebaeckStat = db.getConnection().prepareStatement(deleteGebaeckString);
+        }
+        if (productName.trim().equals("")) {
+            return false;
+        }
+        deleteGebaeckStat.setString(1, productName);
+        int result = deleteGebaeckStat.executeUpdate();
         return result != 0;
     }
 }
