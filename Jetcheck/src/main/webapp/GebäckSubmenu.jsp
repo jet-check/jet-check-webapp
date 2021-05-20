@@ -114,7 +114,7 @@
                 <td class="menuItem">
                 <center>
                     <form method="POST" action="?">
-                        <input type="submit" class="menuButton" value="Altgebäck" name="altGebBtn">
+                        <input type="submit" class="menuButton" value="Altgebäck" name="gebaeckverderbliste">
                     </form>
                 </center>
 
