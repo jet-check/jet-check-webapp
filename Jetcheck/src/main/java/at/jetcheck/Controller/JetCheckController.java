@@ -6,6 +6,7 @@
 package at.jetcheck.Controller;
 
 import at.jetcheck.beans.Bruchware;
+import at.jetcheck.beans.Gebaeckverderb;
 import at.jetcheck.beans.Sonderaufgabe;
 import at.jetcheck.beans.Warenlieferung;
 import at.jetcheck.bl.PDF_Converter;
@@ -48,6 +49,7 @@ public class JetCheckController extends HttpServlet {
     private List<String> fruehaufgaben = new ArrayList<>();
     private List<String> zwischenaufgaben = new ArrayList<>();
     private List<String> spaetaufgaben = new ArrayList<>();
+    private List<Gebaeckverderb> gebaeckverderb = new ArrayList<>();
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -63,6 +65,7 @@ public class JetCheckController extends HttpServlet {
             fruehaufgaben = ioa.getFruehaufgaben(getServletContext().getRealPath("src/fruehaufgaben.txt"));
             zwischenaufgaben = ioa.getZwischenaufgaben(getServletContext().getRealPath("src/zwischenaufgaben.txt"));
             spaetaufgaben = ioa.getSpaetaufgaben(getServletContext().getRealPath("src/spaetaufgaben.txt"));
+            gebaeckverderb = dba.getExpiredBread();
         } catch (SQLException | IOException ex) {
             Logger.getLogger(JetCheckController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -74,6 +77,7 @@ public class JetCheckController extends HttpServlet {
         config.getServletContext().setAttribute("fruehaufgaben", fruehaufgaben);
         config.getServletContext().setAttribute("zwischenaufgaben", zwischenaufgaben);
         config.getServletContext().setAttribute("spaetaufgaben", spaetaufgaben);
+        config.getServletContext().setAttribute("verderbGebaeck", gebaeckverderb);
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
@@ -89,7 +93,7 @@ public class JetCheckController extends HttpServlet {
         request.setAttribute("fruehaufgaben", fruehaufgaben);
         request.setAttribute("zwischenaufgaben", zwischenaufgaben);
         request.setAttribute("speataufgaben", spaetaufgaben);
-
+        request.setAttribute("verderbGebaeck", gebaeckverderb);
         
         if (request.getParameter("warenliste") != null) {
             request.getRequestDispatcher("Warenliste.jsp").forward(request, response);
@@ -257,7 +261,6 @@ public class JetCheckController extends HttpServlet {
 
         // Inserts special task
         if (request.getParameter("specialTask") != null) {
-
             String employee = request.getParameter("employeeName");
             String task = request.getParameter("specialTask");
             String dateStr = request.getParameter("date");
@@ -277,7 +280,6 @@ public class JetCheckController extends HttpServlet {
 
         // Inserts Delivery
         if (request.getParameter("deliveryproductname") != null) {
-
             String ware = request.getParameter("deliveryproductname");
             SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd");
             Date date = new Date(System.currentTimeMillis());
@@ -349,7 +351,63 @@ public class JetCheckController extends HttpServlet {
                 System.out.println("Fehler beim Exportieren der Bruchwaren.");
             }
         }
+        //Insert gebäckverderb into db
+        if (request.getParameter("gebaeckverderbliste") != null) {
+            String productname = request.getParameter("gebaeckverderbname");
+            String date = request.getParameter("date");
+            int amount = Integer.parseInt(request.getParameter("quantity"));
+            try {
+                boolean isInserted = dba.insertExpiredBread(productname, LocalDate.parse(date), amount);
+                gebaeckverderb = dba.getExpiredBread();
+                if (isInserted) {
+                } else {
+                    request.setAttribute("insertError", true);
+                }
+            } catch (SQLException ex) {
+                request.setAttribute("insertError", true);
+            }
+        }
+        
+        //Delete gebackverderb
+        if (request.getParameter("gebaeckverderbliste") != null) {
+            List<Gebaeckverderb> gebaeckverderbToDelete = new ArrayList<>();
+            for (Gebaeckverderb gebaeck : gebaeckverderbToDelete) {
+                String cb = request.getParameter(String.format("cb_%s", gebaeck));
+                if (cb != null) {
+                    gebaeckverderbToDelete.add(gebaeck);
+                }
+            }
+            for (Gebaeckverderb gebaeck : gebaeckverderbToDelete) {
+                try {
+                    boolean test = dba.deleteExpiredBread(gebaeck.getName(), gebaeck.getDate(), gebaeck.getAmount());
+                    gebaeckverderb = dba.getExpiredBread();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                    System.out.println("Verderb existiert nicht oder hat noch Verknüpfungen");
+                }
+            }
+            /*
+            List<Bruchware> brokenProductsToBeDeleted = new ArrayList<>();
+            for (Bruchware brokenProduct : brokenproducts) {
+                String cb = request.getParameter(String.format("cb_%s", brokenProduct));
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + cb);
+                if (cb != null) {
+                    brokenProductsToBeDeleted.add(brokenProduct);
+                }
+            }
 
+            for (Bruchware brokenProduct : brokenProductsToBeDeleted) {
+                try {
+                    boolean test = dba.deleteBruchware(brokenProduct.getWarenname(), brokenProduct.getDatum(), brokenProduct.getAnzahl());
+                    brokenproducts = dba.getAllBruchware();
+                    System.out.println(test);
+                } catch (SQLException ex) {
+                    System.out.println(ex.toString());
+                    System.out.println("Ware existiert nicht oder hat noch Verknüpfungen");
+                }
+            }
+            */
+        }
         processRequest(request, response);
     }
 

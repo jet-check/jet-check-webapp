@@ -6,6 +6,7 @@
 package at.jetcheck.db;
 
 import at.jetcheck.beans.Bruchware;
+import at.jetcheck.beans.Gebaeckverderb;
 import at.jetcheck.beans.Sonderaufgabe;
 import at.jetcheck.beans.Warenlieferung;
 import java.sql.Date;
@@ -36,7 +37,9 @@ public class DB_Access {
     private String insertSonderaufgabeString = "INSERT INTO public.\"Sonderaufgabe\"(\"Beschreibung\", \"Datum\", \"Mitarbeiter\", \"Sonderaufgabenname\", \"SonderaufgabenID\") VALUES (?, ?, ?, ?, ?);";
     private String getAllSonderaufgabeString = "SELECT * FROM public.\"Sonderaufgabe\";";
     private String deleteSonderaufgabeString = "DELETE FROM public.\"Sonderaufgabe\" WHERE (\"Sonderaufgabe\".\"SonderaufgabenID\" = (?)) AND (LOWER(\"Sonderaufgabe\".\"Sonderaufgabenname\") = LOWER(?)) AND (LOWER(public.\"Sonderaufgabe\".\"Mitarbeiter) = LOWER(?)) AND (public.\"Sonderaufgabe\".\"Datum\" = (?))";
-    
+    private String insertExpiredBreadString = "INSERT INTO public.\"GebaeckVerderb\" VALUES (?, ?, ?);";
+    private String getExpiredBreadString = "SELECT * FROM public.\"GebaeckVerderb\"";
+    private String deleteExpiredBreadString = "DELETE FROM public.\"GebaeckVerderb\" WHERE (LOWER(public.\"GebaeckVerderb\".\"Gebaeckname\") = LOWER(?)) AND (public.\"GebaeckVerderb\".\"Datum\" = (?)) AND (public.\"GebaeckVerderb\".\"Anzahl\" = (?);";
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
     private PreparedStatement deleteProductStat;
@@ -49,7 +52,10 @@ public class DB_Access {
     private PreparedStatement insertSonderaufgabeStat;
     private PreparedStatement getAllSonderaufgabeStat;
     private PreparedStatement deleteSonderaufgabeStat;
-
+    private PreparedStatement insertExpiredBreadStat;
+    private PreparedStatement getExpiredBreadStat;
+    private PreparedStatement deleteExpiredBreadStat;
+    
     public static DB_Access getInstance() {
         if (dbInstance == null) {
             dbInstance = new DB_Access();
@@ -263,5 +269,45 @@ public class DB_Access {
             deliveryList.add(warenlieferung);
         });
         return deliveryList;
+    }
+    
+    public boolean insertExpiredBread(String name, LocalDate date, int amount) throws SQLException {
+        if (insertExpiredBreadStat == null) {
+            insertExpiredBreadStat = db.getConnection().prepareStatement(insertExpiredBreadString);
+        }
+        if (name.trim().equals("")) {
+            return false;
+        }
+        insertExpiredBreadStat.setString(1, name);
+        insertExpiredBreadStat.setDate(2, Date.valueOf(date));
+        insertExpiredBreadStat.setInt(3, amount);
+        int result = insertExpiredBreadStat.executeUpdate();
+        return result != 0;
+    }
+    
+    public List<Gebaeckverderb> getExpiredBread() throws SQLException {
+        if (getExpiredBreadStat == null) {
+            getExpiredBreadStat = db.getConnection().prepareStatement(getExpiredBreadString);
+        }
+        List<Gebaeckverderb> expiredBreadList = new ArrayList<>();
+        ResultSet expiredBread = getExpiredBreadStat.executeQuery();
+        while (expiredBread.next()) {
+            expiredBreadList.add(new Gebaeckverderb(expiredBread.getString("Gebaeckname"), expiredBread.getDate("Datum").toLocalDate(), expiredBread.getInt("Anzahl")));
+        }
+        return expiredBreadList;
+    }
+    
+    public boolean deleteExpiredBread(String name, LocalDate date, int amount) throws SQLException {
+        if (deleteExpiredBreadStat == null) {
+            deleteExpiredBreadStat = db.getConnection().prepareStatement(deleteExpiredBreadString);
+        }
+        if (name.trim().equals("") || date == null) {
+            return false;
+        }
+        deleteExpiredBreadStat.setString(1, name);
+        deleteExpiredBreadStat.setDate(2, Date.valueOf(date));
+        deleteExpiredBreadStat.setInt(3, amount);
+        int result = deleteExpiredBreadStat.executeUpdate();
+        return result != 0;
     }
 }
