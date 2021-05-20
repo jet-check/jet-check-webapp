@@ -352,9 +352,10 @@ public class JetCheckController extends HttpServlet {
             }
         }
         //Insert gebäckverderb into db
-        if (request.getParameter("gebaeckverderbliste") != null) {
+        /*if (request.getParameter("gebaeckverderbliste") != null) {
             String productname = request.getParameter("gebaeckverderbname");
             String date = request.getParameter("date");
+            System.out.println(request.getParameter("quantity"));
             int amount = Integer.parseInt(request.getParameter("quantity"));
             try {
                 boolean isInserted = dba.insertExpiredBread(productname, LocalDate.parse(date), amount);
@@ -366,7 +367,7 @@ public class JetCheckController extends HttpServlet {
             } catch (SQLException ex) {
                 request.setAttribute("insertError", true);
             }
-        }
+        }*/
         
         //Delete gebackverderb
         if (request.getParameter("gebaeckverderbliste") != null) {
@@ -386,27 +387,6 @@ public class JetCheckController extends HttpServlet {
                     System.out.println("Verderb existiert nicht oder hat noch Verknüpfungen");
                 }
             }
-            /*
-            List<Bruchware> brokenProductsToBeDeleted = new ArrayList<>();
-            for (Bruchware brokenProduct : brokenproducts) {
-                String cb = request.getParameter(String.format("cb_%s", brokenProduct));
-                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + cb);
-                if (cb != null) {
-                    brokenProductsToBeDeleted.add(brokenProduct);
-                }
-            }
-
-            for (Bruchware brokenProduct : brokenProductsToBeDeleted) {
-                try {
-                    boolean test = dba.deleteBruchware(brokenProduct.getWarenname(), brokenProduct.getDatum(), brokenProduct.getAnzahl());
-                    brokenproducts = dba.getAllBruchware();
-                    System.out.println(test);
-                } catch (SQLException ex) {
-                    System.out.println(ex.toString());
-                    System.out.println("Ware existiert nicht oder hat noch Verknüpfungen");
-                }
-            }
-            */
         }
         processRequest(request, response);
     }
