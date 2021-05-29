@@ -393,6 +393,42 @@ public class JetCheckController extends HttpServlet {
                 }
             }
         }
+        //edit Frühaufgaben
+        if (request.getParameter("editFruehaufgabe") != null) {
+            List<String> new_fruehaufgaben = new ArrayList<>();
+            for (String string : new_fruehaufgaben) {
+                String cb = request.getParameter(String.format("cb_%s", string));
+                if (cb != null) {
+                    new_fruehaufgaben.add(cb);
+                }
+            }
+            ioa.editFruehaufgaben(new_fruehaufgaben, getServletContext().getRealPath("src/fruehaufgaben.txt"));
+            fruehaufgaben = ioa.getFruehaufgaben(getServletContext().getRealPath("src/fruehaufgaben.txt"));
+        }
+        //edit Zwischenaufhaben
+        if (request.getParameter("editZwischenaufgabe") != null) {
+            List<String> new_zwischenaufgaben = new ArrayList<>();
+            for (String string : new_zwischenaufgaben) {
+                String cb = request.getParameter(String.format("cb_%s", string));
+                if (cb != null) {
+                    new_zwischenaufgaben.add(cb);
+                }
+            }
+            ioa.editZwischenaufgaben(new_zwischenaufgaben, getServletContext().getRealPath("src/zwischenaufgaben.txt"));
+            zwischenaufgaben = ioa.getFruehaufgaben(getServletContext().getRealPath("src/zwischenaufgaben.txt"));
+        }
+        //edit Spätaufgaben
+        if (request.getParameter("editSpaetaufgaben") != null) {
+            List<String> new_spaetaufgaben = new ArrayList<>();
+            for (String string : new_spaetaufgaben) {
+                String cb = request.getParameter(String.format("cb_%s", string));
+                if (cb != null) {
+                    new_spaetaufgaben.add(cb);
+                }
+            }
+            ioa.editSpaetaufgaben(new_spaetaufgaben, getServletContext().getRealPath("src/spaetaufgaben.txt"));
+            spaetaufgaben = ioa.getFruehaufgaben(getServletContext().getRealPath("src/spaetaufgaben.txt"));
+        }
         processRequest(request, response);
     }
 

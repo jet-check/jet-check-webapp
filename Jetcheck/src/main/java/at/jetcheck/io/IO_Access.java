@@ -37,31 +37,40 @@ public class IO_Access {
         List<String> aufgaben = br.lines().collect(Collectors.toList());
         return aufgaben;
     }
-    public boolean editFruehaufgaben(String text, String path) throws IOException {
-        List<String> fruehaufgabn_old = getFruehaufgaben(path);
+    public List<String> editFruehaufgaben(List<String> fruehaufgaben_new, String path) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path)))) {
-            bw.write(text);
+            for (int i = 0; i < fruehaufgaben_new.size(); i++) {
+                bw.write(fruehaufgaben_new.get(i));
+            }
+            bw.close();
         }
         BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-        List<String> fruehaufgaben_new = br.lines().collect(Collectors.toList());
-        return fruehaufgaben_new.size() > fruehaufgabn_old.size() && fruehaufgaben_new.containsAll(fruehaufgabn_old);
+        fruehaufgaben_new = br.lines().collect(Collectors.toList());
+        br.close();
+        return fruehaufgaben_new;
     }
-    public boolean editZwischenaufgaben(String text, String path) throws IOException {
-        List<String> zwischenaufgaben_old = getFruehaufgaben(path);
+    public List<String> editZwischenaufgaben(List<String> zwischenaufgaben_new, String path) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path)))) {
-            bw.write(text);
+            for (int i = 0; i < zwischenaufgaben_new.size(); i++) {
+                bw.write(zwischenaufgaben_new.get(i));
+            }
+            bw.close();
         }
         BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-        List<String> zwischenaufgaben_new = br.lines().collect(Collectors.toList());
-        return zwischenaufgaben_new.size() > zwischenaufgaben_old.size() && zwischenaufgaben_new.containsAll(zwischenaufgaben_old);
+        zwischenaufgaben_new = br.lines().collect(Collectors.toList());
+        br.close();
+        return zwischenaufgaben_new;
     }
-    public boolean editSpaetaufgaben(String text, String path) throws IOException {
-        List<String> spaetaufgaben_old = getFruehaufgaben(path);
+    public List<String> editSpaetaufgaben(List<String> spaetaufgaben_new, String path) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(new File(path)))) {
-            bw.write(text);
+            for (int i = 0; i < spaetaufgaben_new.size(); i++) {
+                bw.write(spaetaufgaben_new.get(i));
+            }
+            bw.close();
         }
         BufferedReader br = new BufferedReader(new FileReader(new File(path)));
-        List<String> spaetaufgaben_new = br.lines().collect(Collectors.toList());
-        return spaetaufgaben_new.size() > spaetaufgaben_old.size() && spaetaufgaben_new.containsAll(spaetaufgaben_old);
+        spaetaufgaben_new = br.lines().collect(Collectors.toList());
+        br.close();
+        return spaetaufgaben_new;
     }
 }
