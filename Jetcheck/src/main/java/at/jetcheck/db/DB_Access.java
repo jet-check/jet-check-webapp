@@ -6,6 +6,7 @@
 package at.jetcheck.db;
 
 import at.jetcheck.beans.Bruchware;
+import at.jetcheck.beans.Gebaeckentnahme;
 import at.jetcheck.beans.Gebaeckverderb;
 import at.jetcheck.beans.Sonderaufgabe;
 import at.jetcheck.beans.Warenlieferung;
@@ -43,6 +44,11 @@ public class DB_Access {
     private String insertGebaeckString = "INSERT INTO public.\"Gebaeck\" VALUES(?);";
     private String getAllGebaeckString = "SELECT * FROM public.\"Gebaeck\";";
     private String deleteGebaeckString = "DELETE FROM public.\"Gebaeck\" WHERE LOWER(public.\"Ware\".\"Warenname\") = LOWER(?);";
+    private String insertGebaeckEntnahmeString = "INSERT INTO public.\"Mitarbeiterentnahme\" VALUES(?, ?, ?)";
+    private String getAllGebaeckEntnahmeString = "SELECT * FROM public.\"Mitarbeiterentnahme\"";
+    
+    private PreparedStatement getAllGebaeckEntnahmeStat;
+    private PreparedStatement insertGebaeckEntnahmeStat; 
     private PreparedStatement insertProductStat;
     private PreparedStatement getAllProductsStat;
     private PreparedStatement deleteProductStat;
@@ -341,6 +347,19 @@ public class DB_Access {
         }
         return productList;
     }
+    
+    public boolean insertGebaeckEntnahme(LocalDate date, int anzahl, String gebaeckname) throws SQLException {
+
+        if(insertGebaeckEntnahmeStat == null) {
+            insertGebaeckEntnahmeStat = db.getConnection().prepareStatement(insertGebaeckEntnahmeString);
+        }
+        
+        insertGebaeckEntnahmeStat.setDate(1, Date.valueOf(date));
+        insertGebaeckEntnahmeStat.setInt(2, anzahl);
+        insertGebaeckEntnahmeStat.setString(3, gebaeckname);
+        insertGebaeckEntnahmeStat.executeUpdate();
+        return false;
+    }
 
     public boolean deleteGebaeck(String productName) throws SQLException {
         if (deleteGebaeckStat == null) {
@@ -352,5 +371,24 @@ public class DB_Access {
         deleteGebaeckStat.setString(1, productName);
         int result = deleteGebaeckStat.executeUpdate();
         return result != 0;
+    }
+
+    public List<Gebaeckentnahme> getAllGebaeckEntnahmen() throws SQLException {
+        List<Gebaeckentnahme> liEntnahmen = new ArrayList<>();
+        
+        if(getAllGebaeckEntnahmeStat == null) {
+            getAllGebaeckEntnahmeStat = db.getConnection().prepareStatement(getAllGebaeckEntnahmeString);
+        }
+        
+        ResultSet entnahmen = getAllGebaeckEntnahmeStat.executeQuery();
+        while (entnahmen.next()) {
+            LocalDate date = LocalDate.parse(entnahmen.getDate("Datum").toString());
+            int anzahl = entnahmen.getInt("Anzahl");
+            String gebaeckname = entnahmen.getString("Gebaeckname");
+
+            
+            liEntnahmen.add(new Gebaeckentnahme(date, anzahl, gebaeckname));
+        }
+        return liEntnahmen;
     }
 }
