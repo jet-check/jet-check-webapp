@@ -28,7 +28,7 @@ public class PDF_Converter {
     
     public void exportBruchwarenPdf(List<Bruchware> bruchwaren, String von, String bis) throws FileNotFoundException {
         // Must have write permissions to the path folder
-        PdfWriter writer = new PdfWriter(System.getProperty("user.home") + "Bruchwaren_von_" + von + "_bis_" + bis + ".pdf");
+        PdfWriter writer = new PdfWriter(System.getProperty("user.home") + "\\Downloads\\Bruchwaren_von_" + von + "_bis_" + bis + ".pdf");
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf);
         Paragraph header = new Paragraph("BRUCHWAREN von" + von + " bis " + bis).setTextAlignment(TextAlignment.CENTER).setFontSize(20);
