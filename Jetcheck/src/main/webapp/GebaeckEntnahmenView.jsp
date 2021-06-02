@@ -39,7 +39,7 @@
 
         <div class="content">
             <div class="contentPane">
-                <div class="contentHead">Waren</div>
+                <div class="contentHead">Gebäckentnahme</div>
                 <div class="contentButtonPane">
                     <button class="contentButton" onclick="openModal('itemModal')">
                         Hinzufügen
@@ -50,28 +50,28 @@
                 </div>
                 <div class="contentEntryPane">
                     <form method="POST" action="JetCheckController">
-                    <%-- <c:forEach var="entnahme" items="${entnahmen}"> --%>
+                    <c:forEach var="entnahme" items="${entnahmen}">
                             <div class="contentEntry">
                                 <div class="entryContent">
-                                    <table>
+                                    <table style="width: 100%">
                                         <tr>
                                             <td class="cbCell <c:if test="${!authorized}">hidden</c:if>">
-                                                <input type="checkbox" name="cb_${entnahme.id}">
+                                                <input type="checkbox" name="cb_${entnahme}">
                                             </td>
                                             <td class="nameCell">
-                                                Laugenbreze
+                                                ${entnahme.getGebaeckname()}
                                             </td>
                                             <td class="col1Cell">
-                                                Max Mustermann
+                                                ${entnahme.getAnzahl()}
                                             </td>
                                             <td class="col4Cell">
-                                                12.4.2021
+                                                ${entnahme.getDate()}
                                             </td>
                                         </tr>
                                     </table>
                                 </div>
                             </div>
-                        <%-- </c:forEach> --%>
+                        </c:forEach>
 
                         <div id="deleteEntryModal" class="modal">
                             <div class="modal-content">
@@ -177,19 +177,18 @@
                         <center>
                             <form method="POST" action="JetCheckController" name="newEntnahme">
                                 <div class="inputForm">
-                                    <Select class="inputField" name="gebaeckEntahmeName">
-                                            <option>Warenname</option>
-                                        <c:forEach var="gebaeck" items="${backaren}">
-                                            <option>${gebaeck}</option>
+                                    <Select class="inputField" name="gebaeckEntnahmeName">
+                                        <c:forEach var="backware" items="${gebaeck}">
+                                            <option>${backware}</option>
                                         </c:forEach>
                                     </Select>
                                     <br><br>
-                                    <input class="inputField" type="text" name="employeeName" placeholder="Name">
+                                    <input class="inputField" type="number" name="anzahl" placeholder="Anzahl">
                                     <br><br>
                                     <input class="inputField" type="date" name="date" data-date-format="DD MM YYYY" placeholder="Entahme-Datum">
                                 </div>
                                 <div class="modalButtons">
-                                    <button class="confirmButton" onclick="submit()">OK</button>
+                                    <button class="confirmButton" onclick="submit()" name="gebaeckEntnahme">OK</button>
                                     <button type="button" class="cancelButton" onclick="closeModal('itemModal')">Abbrechen</button>
                                 </div>
                                 <input type="hidden" name="GebaeckEntnahmen">

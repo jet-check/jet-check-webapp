@@ -47,9 +47,8 @@
                     </div>
                     <div class="contentEntryPane filePane">
                         <center>
-                            <iframe class="fileView" src="https://drive.google.com/file/d/1J11Cyy39rC-fV0I7gnvOpiFkU0QPQt_D/preview"></iframe>
+                            <embed class="fileView" src="Dienstplan.pdf">
                         </center>
-
                     </div>  
                 </div>
                 <div class="buttonPane">
@@ -123,7 +122,7 @@
                         </div>
                         <div class="modalValue">
                             <center>
-                                <form method="POST" action="JetCheckController" name="newProduct">
+                                <form method="POST" action="FileUpload" name="newProduct" enctype="multipart/form-data">
                                     <div class="inputForm">
                                         <label>Bitte .pdf Datei auswählen</label>
                                         <div class="inputField">
