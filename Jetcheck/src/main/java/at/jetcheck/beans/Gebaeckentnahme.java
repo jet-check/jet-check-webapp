@@ -8,7 +8,10 @@ package at.jetcheck.beans;
 import java.time.LocalDate;
 import java.util.Objects;
 
-
+/**
+ *
+ * @author oujia
+ */
 public class Gebaeckentnahme {
     private LocalDate date;
     private int anzahl;

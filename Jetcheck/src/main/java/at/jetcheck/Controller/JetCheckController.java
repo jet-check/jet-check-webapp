@@ -220,6 +220,7 @@ public class JetCheckController extends HttpServlet {
             List<Bruchware> brokenProductsToBeDeleted = new ArrayList<>();
             for (Bruchware brokenProduct : brokenproducts) {
                 String cb = request.getParameter(String.format("cb_%s", brokenProduct));
+                System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>" + cb);
                 if (cb != null) {
                     brokenProductsToBeDeleted.add(brokenProduct);
                 }
@@ -445,6 +446,7 @@ public class JetCheckController extends HttpServlet {
 
         // Gebaeckentnahme
         if (request.getParameter("gebaeckEntnahme") != null) {
+            System.out.println("hallo???");
             try {
                 int anzahl = Integer.parseInt(request.getParameter("anzahl"));
                 LocalDate date = LocalDate.parse(request.getParameter("date"), dtf);
@@ -460,7 +462,7 @@ public class JetCheckController extends HttpServlet {
                 System.out.println(e.toString());
             }
             for (Gebaeckentnahme gebaeckentnahme : entnahmen) {
-
+                System.out.println("YAAAAAAAAAAAAAAAAAAAAY");
                 System.out.println(gebaeckentnahme.getGebaeckname() + " " + gebaeckentnahme.getAnzahl());
             }
 
