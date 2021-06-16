@@ -68,16 +68,19 @@ public class DB_Database {
         dbPassword = "postgres";
     }
     
-    
+    public void loadPropertiesLiveServer() {
+        dbUrl = "jdbc:postgresql://185.51.8.52/u119628db4";
+        dbDriver = "org.postgresql.Driver";
+        dbUsername = "u119628db4";
+        dbPassword = ".do33l54hywn";
+    }
     public static void main(String[] args) {
         try {
             DB_Database db = new DB_Database();
             db.connect();
             db.disconnect();
-        } catch (ClassNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+        } catch (ClassNotFoundException | SQLException ex) {
+            System.out.println(ex.toString());
         }
     }
 }
